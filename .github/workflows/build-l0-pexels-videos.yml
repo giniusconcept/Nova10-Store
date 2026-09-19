@@ -6,6 +6,9 @@ on:
     paths:
       - '.github/workflows/build-l0-pexels-videos.yml'
 
+permissions:
+  contents: write
+
 jobs:
   build-videos:
     runs-on: ubuntu-latest
@@ -66,6 +69,22 @@ jobs:
 
           Footage is used as generic category illustration. It is not presented as footage of a specific product sold by NOVA10.
           EOF
+
+      - name: Publish MP4 files to public site folder
+        run: |
+          mkdir -p public/videos
+          cp build/output/*.mp4 public/videos/
+          cp build/output/SOURCES.txt public/videos/SOURCES.txt
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/videos
+          if git diff --cached --quiet; then
+            echo 'No video changes to commit.'
+          else
+            git commit -m 'Publish NOVA10 L0 videos'
+            git push
+          fi
 
       - name: Upload NOVA10 videos
         uses: actions/upload-artifact@v4
