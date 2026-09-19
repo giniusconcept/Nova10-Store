@@ -1,0 +1,2 @@
+trigger=2026-09-19T08:20:00Z
+video=nova10_short_01_avant_apres.mp4
