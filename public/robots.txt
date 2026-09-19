@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://square-sunset-9f1a.giniusconcept.workers.dev/sitemap.xml
