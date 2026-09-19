@@ -1,0 +1,75 @@
+name: Build L0 Pexels Videos
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-l0-pexels-videos.yml'
+
+jobs:
+  build-videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Download Pexels source clips
+        run: |
+          mkdir -p build/sources build/output
+          curl -L --fail --retry 3 -o build/sources/car_pressure.mp4 \
+            'https://videos.pexels.com/video-files/6872072/6872072-hd_720_1280_25fps.mp4'
+          curl -L --fail --retry 3 -o build/sources/car_closeup.mp4 \
+            'https://videos.pexels.com/video-files/6872080/6872080-hd_720_1280_25fps.mp4'
+          curl -L --fail --retry 3 -o build/sources/wheel_clean.mp4 \
+            'https://videos.pexels.com/video-files/4822717/4822717-hd_1920_1080_30fps.mp4'
+
+      - name: Build short 1 - Before / after hook
+        run: |
+          ffmpeg -y -i build/sources/car_pressure.mp4 -t 12 \
+            -vf "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,drawbox=x=0:y=0:w=iw:h=150:color=black@0.58:t=fill:enable='between(t,0,3.2)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='REGARDE CET AVANT / APRES':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=54:enable='between(t,0,3.2)',drawbox=x=0:y=h-190:w=iw:h=190:color=black@0.58:t=fill:enable='between(t,7.3,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='LE GUIDE EST SUR NOVA10':fontcolor=white:fontsize=44:x=(w-text_w)/2:y=h-135:enable='between(t,7.3,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Illustration Pexels - produit generique':fontcolor=white@0.82:fontsize=20:x=(w-text_w)/2:y=h-55:enable='between(t,0,12)'" \
+            -an -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -movflags +faststart build/output/nova10_short_01_avant_apres.mp4
+
+      - name: Build short 2 - Pressure cleaning hook
+        run: |
+          ffmpeg -y -i build/sources/car_closeup.mp4 -t 12 \
+            -vf "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,drawbox=x=0:y=0:w=iw:h=150:color=black@0.58:t=fill:enable='between(t,0,3.5)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='HAUTE PRESSION : UTILE ?':fontcolor=white:fontsize=46:x=(w-text_w)/2:y=52:enable='between(t,0,3.5)',drawbox=x=0:y=h-190:w=iw:h=190:color=black@0.58:t=fill:enable='between(t,7,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='VOIR LE GUIDE NOVA10':fontcolor=white:fontsize=46:x=(w-text_w)/2:y=h-135:enable='between(t,7,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Illustration Pexels - produit generique':fontcolor=white@0.82:fontsize=20:x=(w-text_w)/2:y=h-55:enable='between(t,0,12)'" \
+            -an -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -movflags +faststart build/output/nova10_short_02_haute_pression.mp4
+
+      - name: Build short 3 - Wheel hook
+        run: |
+          ffmpeg -y -i build/sources/wheel_clean.mp4 -t 12 \
+            -vf "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,drawbox=x=0:y=0:w=iw:h=150:color=black@0.58:t=fill:enable='between(t,0,3.2)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='JANTE SALE ?':fontcolor=white:fontsize=58:x=(w-text_w)/2:y=48:enable='between(t,0,3.2)',drawbox=x=0:y=h-190:w=iw:h=190:color=black@0.58:t=fill:enable='between(t,7.2,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='LE DETAIL QUI CHANGE TOUT':fontcolor=white:fontsize=36:x=(w-text_w)/2:y=h-142:enable='between(t,7.2,9.6)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='GUIDE NOVA10':fontcolor=white:fontsize=52:x=(w-text_w)/2:y=h-130:enable='between(t,9.6,12)',drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Illustration Pexels - produit generique':fontcolor=white@0.82:fontsize=20:x=(w-text_w)/2:y=h-55:enable='between(t,0,12)'" \
+            -an -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -movflags +faststart build/output/nova10_short_03_jante.mp4
+
+      - name: Add source manifest
+        run: |
+          cat > build/output/SOURCES.txt <<'EOF'
+          NOVA10 L0 - Pexels source manifest
+
+          Video 1 source:
+          https://www.pexels.com/video/man-pressure-washing-a-white-car-6872072/
+          Creator: Tima Miroshnichenko / Pexels
+
+          Video 2 source:
+          https://www.pexels.com/video/close-up-shot-of-a-person-washing-the-car-6872080/
+          Creator: Tima Miroshnichenko / Pexels
+
+          Video 3 source:
+          https://www.pexels.com/video/person-cleaning-car-wheel-4822717/
+          Creator: Gustavo Fring / Pexels
+
+          Footage is used as generic category illustration. It is not presented as footage of a specific product sold by NOVA10.
+          EOF
+
+      - name: Upload NOVA10 videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova10-l0-pexels-videos
+          path: build/output/*
+          retention-days: 30
