@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>NOVA10 Admin</title>
+<style>
+:root{--bg:#f6f6f7;--surface:#fff;--ink:#202223;--muted:#6d7175;--line:#e1e3e5;--accent:#008060;--accent2:#004c3f;--warn:#916a00;--danger:#d72c0d;--sidebar:#f1f2f3;--shadow:0 1px 0 rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.08)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.shell{min-height:100vh;display:grid;grid-template-columns:248px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:14px 12px;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:10px;padding:10px 10px 18px;font-weight:800;font-size:17px}.brand-mark{width:30px;height:30px;border-radius:8px;background:#111;color:#fff;display:grid;place-items:center;font-size:11px;letter-spacing:.02em}.nav{display:grid;gap:2px}.nav button,.nav a{border:0;background:transparent;color:#303236;text-decoration:none;text-align:left;padding:9px 10px;border-radius:8px;display:flex;align-items:center;gap:10px;font-size:14px}.nav button:hover,.nav a:hover{background:#e5e7e9}.nav button.active{background:#dfe3e5;font-weight:650}.nav .ico{width:20px;text-align:center;color:#555}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:10px}.main{min-width:0}.topbar{height:58px;border-bottom:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10}.topbar strong{font-size:14px}.top-actions{display:flex;gap:8px;align-items:center}.ghost,.primary{border:1px solid #babfc3;background:#fff;color:#202223;border-radius:7px;min-height:34px;padding:0 12px;font-weight:600;font-size:13px}.primary{background:#008060;color:#fff;border-color:#008060}.content{max-width:1180px;margin:0 auto;padding:28px 28px 70px}.view{display:none}.view.active{display:block}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}.page-head h1{margin:0;font-size:24px;letter-spacing:-.02em}.page-head p{margin:5px 0 0;color:var(--muted);font-size:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.metric{padding:18px}.metric .label{font-size:13px;color:var(--muted)}.metric .value{font-size:27px;font-weight:750;margin-top:8px;letter-spacing:-.03em}.metric .sub{font-size:12px;color:var(--muted);margin-top:5px}.grid2{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-bottom:16px}.card-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.card-head h2{font-size:15px;margin:0}.card-body{padding:18px}.chart{height:220px;display:flex;gap:4px;align-items:end;padding-top:20px}.bar-wrap{flex:1;min-width:3px;height:100%;display:flex;align-items:end}.bar{width:100%;background:#96d8c5;border-radius:3px 3px 0 0;min-height:2px}.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#96d8c5;margin-right:5px}.status-list{display:grid;gap:12px}.status-row{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:14px}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:650;background:#e4f5ef;color:#007a5a}.pill.warn{background:#fff1cd;color:#7a5b00}.pill.bad{background:#fff0ed;color:#bf0711}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th{text-align:left;color:var(--muted);font-weight:600;background:#fafbfb}.table th,.table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}.table tr:last-child td{border-bottom:0}.prod{display:flex;align-items:center;gap:10px;min-width:220px}.prod img{width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}.input{width:100%;min-width:90px;border:1px solid #babfc3;border-radius:6px;padding:7px 8px;background:#fff}.input.small{min-width:72px;width:80px}.input.wide{min-width:160px}.save-btn{border:1px solid #babfc3;background:#fff;border-radius:6px;padding:7px 10px;font-weight:650}.empty{padding:44px 20px;text-align:center;color:var(--muted)}.empty strong{display:block;color:var(--ink);margin-bottom:6px}.source-list{display:grid;gap:11px}.source-row{display:grid;grid-template-columns:120px 1fr 54px;gap:10px;align-items:center;font-size:13px}.source-track{height:8px;background:#edf0f1;border-radius:999px;overflow:hidden}.source-fill{height:100%;background:#96d8c5}.list{display:grid;gap:10px}.list-item{padding:12px 14px;border:1px solid var(--line);border-radius:8px;display:flex;justify-content:space-between;gap:14px;align-items:center}.setting-row{display:flex;justify-content:space-between;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}.setting-row:last-child{border-bottom:0}.setting-row h3{font-size:14px;margin:0 0 4px}.setting-row p{font-size:13px;color:var(--muted);margin:0}.login{min-height:100vh;display:grid;place-items:center;padding:22px;background:#f6f6f7}.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:12px;padding:28px;box-shadow:0 8px 28px rgba(0,0,0,.08)}.login-logo{width:44px;height:44px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:18px}.login-card h1{font-size:22px;margin:0 0 8px}.login-card p{font-size:14px;color:var(--muted);margin:0 0 20px}.login-card label{font-size:13px;font-weight:650;display:block;margin-bottom:6px}.login-card input{width:100%;border:1px solid #8c9196;border-radius:7px;padding:11px 12px;margin-bottom:12px}.login-card button{width:100%;min-height:42px}.error{color:#bf0711;font-size:13px;margin-top:10px}.mobile-toggle{display:none}.note{padding:12px 14px;border-radius:8px;background:#fff8e5;border:1px solid #ffe7a3;color:#5c4b00;font-size:13px}.kpi-row{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}.kpi-row b{color:var(--ink)}@media(max-width:980px){.metric-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}@media(max-width:760px){.shell{grid-template-columns:1fr}.sidebar{position:fixed;z-index:30;left:0;top:0;width:250px;transform:translateX(-102%);transition:.2s}.sidebar.open{transform:translateX(0)}.mobile-toggle{display:inline-flex}.topbar{padding:0 14px}.content{padding:20px 14px 60px}.metric-grid{grid-template-columns:1fr 1fr}.page-head{flex-direction:column}.table th,.table td{padding:10px}.top-actions .store-link{display:none}}@media(max-width:480px){.metric-grid{grid-template-columns:1fr}.metric .value{font-size:24px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="login">
+  <form class="login-card" id="loginForm">
+    <div class="login-logo">N10</div>
+    <h1>Connexion NOVA10</h1>
+    <p>Accédez au cockpit marchand indépendant.</p>
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" autocomplete="current-password" required autofocus>
+    <button class="primary" type="submit">Se connecter</button>
+    <div id="loginError" class="error hidden"></div>
+  </form>
+</div>
+
+<div id="adminApp" class="shell hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">N10</span>NOVA10</div>
+    <nav class="nav" id="nav">
+      <button class="active" data-view="home"><span class="ico">⌂</span>Accueil</button>
+      <button data-view="orders"><span class="ico">▣</span>Commandes</button>
+      <button data-view="products"><span class="ico">◇</span>Produits</button>
+      <button data-view="customers"><span class="ico">◎</span>Clients</button>
+      <button data-view="analytics"><span class="ico">▥</span>Analytics</button>
+      <button data-view="acquisition"><span class="ico">↗</span>Acquisition</button>
+      <button data-view="stock"><span class="ico">▦</span>Stock</button>
+      <button data-view="payments"><span class="ico">€</span>Paiements</button>
+      <button data-view="settings"><span class="ico">⚙</span>Paramètres</button>
+    </nav>
+    <div class="side-bottom nav">
+      <a href="/" target="_blank"><span class="ico">↗</span>Voir la boutique</a>
+      <button id="logout"><span class="ico">⇥</span>Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><button class="ghost mobile-toggle" id="menuToggle">☰</button> <strong id="topTitle">Accueil</strong></div>
+      <div class="top-actions"><a class="ghost store-link" href="/" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center">Voir la boutique</a><button class="ghost" id="refresh">Actualiser</button></div>
+    </header>
+    <div class="content">
+      <section class="view active" data-view="home">
+        <div class="page-head"><div><h1>Accueil</h1><p>Vue d’ensemble de NOVA10 aujourd’hui.</p></div><div class="kpi-row"><span>Données <b>first-party</b></span><span>Fenêtre <b>30 jours</b></span></div></div>
+        <div class="metric-grid">
+          <div class="card metric"><div class="label">Visiteurs aujourd’hui</div><div class="value" id="mVisitors">0</div><div class="sub">sessions uniques</div></div>
+          <div class="card metric"><div class="label">Pages vues aujourd’hui</div><div class="value" id="mViews">0</div><div class="sub">toutes pages</div></div>
+          <div class="card metric"><div class="label">Commandes aujourd’hui</div><div class="value" id="mOrders">0</div><div class="sub">commandes payées</div></div>
+          <div class="card metric"><div class="label">Chiffre d’affaires aujourd’hui</div><div class="value" id="mRevenue">0,00 €</div><div class="sub">revenu enregistré</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><div class="card-head"><h2>Visiteurs — 30 derniers jours</h2><span class="pill" id="sessions30">0 sessions</span></div><div class="card-body"><div id="trafficChart" class="chart"></div><div class="legend"><span><i class="dot"></i>Visiteurs</span></div></div></div>
+          <div class="card"><div class="card-head"><h2>État de la boutique</h2></div><div class="card-body status-list"><div class="status-row"><span>Storefront</span><span class="pill">En ligne</span></div><div class="status-row"><span>Analytics</span><span class="pill">Actif</span></div><div class="status-row"><span>Paiement</span><span class="pill bad">Non connecté</span></div><div class="status-row"><span>Checkout</span><span class="pill warn">Préparation</span></div><div class="status-row"><span>Produits prêts</span><span class="pill warn" id="readyProducts">0 / 10</span></div></div></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><div class="card-head"><h2>Sources de trafic</h2></div><div class="card-body"><div id="homeSources" class="source-list"></div></div></div>
+          <div class="card"><div class="card-head"><h2>Parcours commercial</h2></div><div class="card-body status-list"><div class="status-row"><span>Vues produit</span><b id="fProductViews">0</b></div><div class="status-row"><span>Ajouts panier</span><b id="fCart">0</b></div><div class="status-row"><span>Checkouts</span><b id="fCheckout">0</b></div><div class="status-row"><span>Commandes</span><b id="fOrders">0</b></div><div class="status-row"><span>Taux conversion</span><b id="fConversion">0 %</b></div></div></div>
+        </div>
+      </section>
+
+      <section class="view" data-view="orders"><div class="page-head"><div><h1>Commandes</h1><p>Toutes les commandes enregistrées par NOVA10.</p></div></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Commande</th><th>Date</th><th>Client</th><th>Paiement</th><th>Traitement</th><th>Total</th></tr></thead><tbody id="ordersBody"></tbody></table><div class="empty" id="ordersEmpty"><strong>Aucune commande</strong>Les commandes apparaîtront ici dès que le checkout sera connecté.</div></div></div></section>
+
+      <section class="view" data-view="products"><div class="page-head"><div><h1>Produits</h1><p>Prix, stock, fournisseur et statut de chaque référence.</p></div></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Produit</th><th>Prix</th><th>Stock</th><th>Statut</th><th>Fournisseur</th><th>SKU fournisseur</th><th></th></tr></thead><tbody id="productsBody"></tbody></table></div></div></section>
+
+      <section class="view" data-view="customers"><div class="page-head"><div><h1>Clients</h1><p>Clients issus des commandes NOVA10.</p></div></div><div class="card"><div id="customersList" class="card-body list"></div></div></section>
+
+      <section class="view" data-view="analytics"><div class="page-head"><div><h1>Analytics</h1><p>Mesure first-party du trafic et du comportement.</p></div></div><div class="metric-grid"><div class="card metric"><div class="label">Visiteurs 30 j</div><div class="value" id="aVisitors">0</div></div><div class="card metric"><div class="label">Pages vues 30 j</div><div class="value" id="aViews">0</div></div><div class="card metric"><div class="label">Vues produit</div><div class="value" id="aProducts">0</div></div><div class="card metric"><div class="label">Recherches</div><div class="value" id="aSearches">0</div></div></div><div class="grid2"><div class="card"><div class="card-head"><h2>Trafic quotidien</h2></div><div class="card-body"><div id="analyticsChart" class="chart"></div></div></div><div class="card"><div class="card-head"><h2>Produits les plus vus</h2></div><div class="card-body"><div id="topProducts" class="source-list"></div></div></div></div></section>
+
+      <section class="view" data-view="acquisition"><div class="page-head"><div><h1>Acquisition</h1><p>Origine des sessions et attribution des campagnes.</p></div></div><div class="card"><div class="card-head"><h2>Sources — 30 derniers jours</h2></div><div class="card-body"><div id="acqSources" class="source-list"></div></div></div></section>
+
+      <section class="view" data-view="stock"><div class="page-head"><div><h1>Stock</h1><p>Disponibilité des 10 références NOVA10.</p></div></div><div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Produit</th><th>SKU</th><th>Stock</th><th>État</th><th>Fournisseur</th></tr></thead><tbody id="stockBody"></tbody></table></div></div></section>
+
+      <section class="view" data-view="payments"><div class="page-head"><div><h1>Paiements</h1><p>Configuration du paiement indépendant.</p></div></div><div class="card"><div class="card-body"><div class="note">Le storefront NOVA10 est indépendant et en ligne, mais aucun prestataire de paiement réel n’est encore connecté. Les ventes restent donc bloquées volontairement.</div><div class="setting-row"><div><h3>Prestataire carte bancaire</h3><p>Stripe ou autre PSP à connecter au backend NOVA10.</p></div><span class="pill bad">Non connecté</span></div><div class="setting-row"><div><h3>Checkout réel</h3><p>Activation après connexion du prestataire et validation d’une commande test.</p></div><span class="pill warn">À finaliser</span></div></div></div></section>
+
+      <section class="view" data-view="settings"><div class="page-head"><div><h1>Paramètres</h1><p>État opérationnel et informations générales.</p></div></div><div class="card"><div class="card-body"><div class="setting-row"><div><h3>Boutique</h3><p>NOVA10 — infrastructure indépendante Cloudflare.</p></div><span class="pill">En ligne</span></div><div class="setting-row"><div><h3>Back-office</h3><p>Sessions privées, analytics, catalogue, stock et commandes.</p></div><span class="pill">Actif</span></div><div class="setting-row"><div><h3>Historique analytics</h3><p>Les statistiques first-party commencent à compter à partir de l’activation de ce cockpit.</p></div><span class="pill">Actif</span></div><div class="setting-row"><div><h3>Identité juridique</h3><p>À compléter avant l’ouverture commerciale définitive.</p></div><span class="pill warn">À compléter</span></div></div></div></section>
+    </div>
+  </main>
+</div>
+<script src="/admin/admin.js" defer></script>
+</body>
+</html>
