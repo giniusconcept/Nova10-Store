@@ -1,4 +1,4 @@
-const € = n => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(Number(n||0));
+const euro = n => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(Number(n||0));
 const num = n => new Intl.NumberFormat('fr-FR').format(Number(n||0));
 let DATA = null;
 
@@ -40,7 +40,7 @@ function renderDashboard(){
   document.getElementById('mVisitors').textContent=num(t.sessions);
   document.getElementById('mViews').textContent=num(t.pageViews);
   document.getElementById('mOrders').textContent=num(t.orders);
-  document.getElementById('mRevenue').textContent=€(t.revenue);
+  document.getElementById('mRevenue').textContent=euro(t.revenue);
   document.getElementById('sessions30').textContent=`${num(l.sessions)} sessions`;
   document.getElementById('readyProducts').textContent=`${d.operational.productsReady} / ${d.operational.productsTotal}`;
   document.getElementById('fProductViews').textContent=num(l.productViews);
@@ -59,7 +59,7 @@ function renderDashboard(){
 function renderOrders(){
   const body=document.getElementById('ordersBody'), empty=document.getElementById('ordersEmpty');
   const rows=DATA.orders||[]; empty.classList.toggle('hidden',rows.length>0);
-  body.innerHTML=rows.map(o=>`<tr><td><b>#${escapeHtml(o.number||o.id||'—')}</b></td><td>${escapeHtml((o.createdAt||'').slice(0,10))}</td><td>${escapeHtml(o.email||'—')}</td><td><span class="pill">${escapeHtml(o.paymentStatus||'Payé')}</span></td><td>${escapeHtml(o.fulfillmentStatus||'Non traité')}</td><td><b>${€(o.total)}</b></td></tr>`).join('');
+  body.innerHTML=rows.map(o=>`<tr><td><b>#${escapeHtml(o.number||o.id||'—')}</b></td><td>${escapeHtml((o.createdAt||'').slice(0,10))}</td><td>${escapeHtml(o.email||'—')}</td><td><span class="pill">${escapeHtml(o.paymentStatus||'Payé')}</span></td><td>${escapeHtml(o.fulfillmentStatus||'Non traité')}</td><td><b>${euro(o.total)}</b></td></tr>`).join('');
 }
 
 function renderProducts(){
