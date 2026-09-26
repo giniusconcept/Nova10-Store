@@ -17,6 +17,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Build independent NOVA10 image assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/assets/images
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-pressure-washer.jpg?v=1789799276' -o public/assets/images/nova10-pressure-washer.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-kbeauty-serum.jpg?v=1789799820' -o public/assets/images/nova10-kbeauty-serum.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-tumbler.jpg?v=1789799836' -o public/assets/images/nova10-tumbler.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-athleisure.jpg?v=1789799845' -o public/assets/images/nova10-athleisure.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-crossbody.jpg?v=1789799909' -o public/assets/images/nova10-crossbody.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-bedding.jpg?v=1789799861' -o public/assets/images/nova10-bedding.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-phone-accessories.jpg?v=1789799872' -o public/assets/images/nova10-phone-accessories.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-beauty-device.jpg?v=1789799879' -o public/assets/images/nova10-beauty-device.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-portable-fan.jpg?v=1789799889' -o public/assets/images/nova10-portable-fan.jpg
+          curl -L --fail --retry 3 'https://cdn.shopify.com/s/files/1/1064/6011/9382/files/nova10-gaming-controller.jpg?v=1789799899' -o public/assets/images/nova10-gaming-controller.jpg
+
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
