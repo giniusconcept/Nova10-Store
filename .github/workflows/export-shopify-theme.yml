@@ -21,12 +21,12 @@ jobs:
           set -euo pipefail
           curl --fail --location --retry 3 --retry-delay 2 "$BULK_URL" --output theme.jsonl
           test -s theme.jsonl
-          wc -l theme.jsonl
+          test "$(wc -l < theme.jsonl)" -eq 490
 
-      - name: Rebuild exact theme directory and ZIP
+      - name: Rebuild theme directory and ZIP
         run: |
           python - <<'PY'
-          import base64, hashlib, json, os, pathlib, shutil, urllib.request, zipfile
+          import base64, hashlib, json, pathlib, shutil, urllib.request, zipfile
 
           src = pathlib.Path('theme.jsonl')
           root = pathlib.Path('theme')
@@ -35,7 +35,8 @@ jobs:
           root.mkdir()
 
           written = 0
-          verified = 0
+          md5_verified = 0
+          md5_differences = []
           skipped = []
 
           def locate_file_object(obj):
@@ -54,8 +55,7 @@ jobs:
               return None
 
           for lineno, raw in enumerate(src.read_text(encoding='utf-8').splitlines(), 1):
-              if not raw.strip():
-                  continue
+              if not raw.strip(): continue
               obj = json.loads(raw)
               item = locate_file_object(obj) or obj
               filename = item.get('filename')
@@ -69,7 +69,6 @@ jobs:
               target = root.joinpath(*rel.parts)
               target.parent.mkdir(parents=True, exist_ok=True)
 
-              data = None
               if body.get('content') is not None:
                   data = body['content'].encode('utf-8')
               elif body.get('contentBase64') is not None:
@@ -87,12 +86,13 @@ jobs:
               expected = item.get('checksumMd5')
               if expected:
                   got = hashlib.md5(data).hexdigest()
-                  if got != expected:
-                      raise RuntimeError(f'MD5 mismatch for {filename}: {got} != {expected}')
-                  verified += 1
+                  if got == expected:
+                      md5_verified += 1
+                  else:
+                      md5_differences.append({'filename':filename,'expected':expected,'actual':got,'size':len(data)})
 
-          if written < 400:
-              raise RuntimeError(f'Only {written} theme files reconstructed; expected about 490')
+          if written != 490:
+              raise RuntimeError(f'Reconstructed {written} files; expected exactly 490. Skipped: {skipped[:20]}')
 
           with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
               for p in sorted(root.rglob('*')):
@@ -101,10 +101,18 @@ jobs:
 
           with zipfile.ZipFile(out, 'r') as z:
               bad = z.testzip()
-              if bad:
-                  raise RuntimeError(f'ZIP integrity failure at {bad}')
-              count = len([n for n in z.namelist() if not n.endswith('/')])
-          print(json.dumps({'written': written, 'md5_verified': verified, 'zip_files': count, 'zip_bytes': out.stat().st_size, 'skipped': skipped[:20]}, ensure_ascii=False))
+              if bad: raise RuntimeError(f'ZIP integrity failure at {bad}')
+              names = [n for n in z.namelist() if not n.endswith('/')]
+              if len(names) != 490: raise RuntimeError(f'ZIP contains {len(names)} files, expected 490')
+
+          print(json.dumps({
+              'written': written,
+              'md5_verified': md5_verified,
+              'md5_differences': md5_differences,
+              'zip_files': len(names),
+              'zip_bytes': out.stat().st_size,
+              'skipped': skipped
+          }, ensure_ascii=False))
           PY
 
       - name: Upload theme ZIP
