@@ -15,9 +15,47 @@ const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 function showLogin(){ $('#loginView')?.classList.remove('hidden'); $('#adminApp')?.classList.add('hidden'); }
 function showApp(){ $('#loginView')?.classList.add('hidden'); $('#adminApp')?.classList.remove('hidden'); }
-function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]))}
 function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value}
 function toast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),1800)}
+
+function installShopifyHoverParity(){
+  if(document.getElementById('shopify-hover-parity')) return;
+  const style=document.createElement('style');
+  style.id='shopify-hover-parity';
+  style.textContent=`
+    .nav-icon,.nav-icon .icon,.top-icon .icon,.group-head button .icon,.composer-btn .icon{
+      transition:transform 115ms cubic-bezier(.2,.8,.2,1),color 100ms ease;
+      transform-origin:50% 50%;
+      will-change:transform;
+    }
+    .nav button:hover .nav-icon,.nav a:hover .nav-icon,
+    .nav button:focus-visible .nav-icon,.nav a:focus-visible .nav-icon{
+      transform:scale(1.13);
+      color:#303030;
+    }
+    .nav button:hover .nav-icon .icon,.nav a:hover .nav-icon .icon{
+      transform:scale(1.035);
+    }
+    .top-icon:hover .icon,.top-icon.active .icon,.top-icon:focus-visible .icon{
+      transform:scale(1.13);
+    }
+    .group-head button:hover .icon,.group-head button:focus-visible .icon{
+      transform:scale(1.15);
+    }
+    .composer-btn:hover .icon,.composer-btn:focus-visible .icon{
+      transform:scale(1.10);
+    }
+    .nav button:active .nav-icon,.nav a:active .nav-icon,.top-icon:active .icon{
+      transform:scale(.96);
+      transition-duration:65ms;
+    }
+    @media (prefers-reduced-motion:reduce){
+      .nav-icon,.nav-icon .icon,.top-icon .icon,.group-head button .icon,.composer-btn .icon{transition:none!important}
+    }
+  `;
+  document.head.appendChild(style);
+}
 
 function renderBars(hostId, series){
   const host=document.getElementById(hostId); if(!host)return;
@@ -133,6 +171,7 @@ function routeAssistant(text, host){
 async function logout(){try{await api('/api/admin/logout',{method:'POST',body:'{}'})}catch{}closePopovers();showLogin();const p=$('#password');if(p)p.value='';history.replaceState(null,'',location.pathname)}
 
 function bindUI(){
+  installShopifyHoverParity();
   $$('.nav button[data-view]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
   $$('[data-jump]').forEach(el=>el.addEventListener('click',()=>switchView(el.dataset.jump)));
   $$('[data-collapsible] .group-head button').forEach(btn=>btn.addEventListener('click',()=>btn.closest('[data-collapsible]')?.classList.toggle('collapsed')));
