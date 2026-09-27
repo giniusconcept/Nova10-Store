@@ -1,7 +1,7 @@
 /* NOVA10 — Horizon compatibility layer
    Source: exported Shopify theme NOVA10 Final / Horizon.
    Purpose: keep the independent Cloudflare storefront aligned with the
-   design, spacing, accessibility and responsive conventions of the Shopify theme. */
+   design, spacing, accessibility, responsive and motion conventions of the Shopify theme. */
 
 :root{
   --safe-area-inset-top:env(safe-area-inset-top,0px);
@@ -24,6 +24,20 @@
   --shopify-primary-radius:14px;
   --shopify-secondary-radius:14px;
   --shopify-input-radius:4px;
+
+  /* Exact Horizon timing constants from the exported theme. */
+  --animation-speed-fast:.0625s;
+  --animation-speed:.125s;
+  --animation-speed-slow:.2s;
+  --animation-speed-medium:.15s;
+  --animation-easing:ease-in-out;
+  --drawer-animation-speed:.2s;
+  --animation-timing-hover:cubic-bezier(.25,.46,.45,.94);
+  --animation-timing-active:cubic-bezier(.5,0,.75,0);
+  --animation-timing-bounce:cubic-bezier(.34,1.56,.64,1);
+  --animation-timing-default:cubic-bezier(0,0,.2,1);
+  --animation-timing-fade-in:cubic-bezier(.16,1,.3,1);
+  --animation-timing-fade-out:cubic-bezier(.4,0,.2,1);
 }
 
 @media (min-width:40em){
@@ -74,7 +88,7 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
   }
 }
 
-/* Theme settings: card_hover_effect = none */
+/* Theme settings from NOVA10 Final: card_hover_effect = none. */
 .collection-card img,
 .product-media img{
   transform:none!important;
@@ -84,7 +98,7 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
   transform:none!important;
 }
 
-/* Theme settings: primary/secondary buttons */
+/* Theme settings: primary/secondary buttons. */
 .button{
   min-height:var(--minimum-touch-target);
   border-radius:var(--shopify-primary-radius);
@@ -92,6 +106,7 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
   color:var(--shopify-background);
   box-shadow:none;
   transform:none!important;
+  transition:opacity var(--animation-speed) var(--animation-easing),background-color var(--animation-speed) var(--animation-easing);
 }
 .button:hover:not(:disabled){opacity:.82}
 .button.secondary{
@@ -104,6 +119,12 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
 .icon-btn,.drawer-close,.zoom-close{
   min-width:var(--minimum-touch-target);
   min-height:var(--minimum-touch-target);
+  transition:transform var(--animation-speed-medium) var(--animation-timing-bounce),background-color var(--animation-speed-medium) var(--animation-timing-hover);
+}
+.icon-btn:active,.drawer-close:active,.zoom-close:active,.email-pill button:active{
+  transform:scale(.88);
+  transition-duration:100ms;
+  transition-timing-function:var(--animation-timing-active);
 }
 
 /* Exact section-height convention from the exported Horizon variables. */
@@ -112,7 +133,7 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
   min-height:var(--section-height-large);
 }
 
-/* Preserve Shopify theme's 56px H1 and responsive hierarchy. */
+/* Preserve Shopify theme's responsive hierarchy. */
 .hero-content h1{
   font-size:clamp(2.5rem,5vw,3.5rem);
   line-height:1.03;
@@ -122,20 +143,84 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
   font-size:clamp(2.25rem,4vw,3rem);
 }
 
-/* Shopify drawer / popover visual conventions. */
+/* Shopify drawer / popover conventions + original Horizon timings. */
 .drawer{
   width:min(30rem,100vw);
   border-inline-start:1px solid var(--shopify-color-2);
   box-shadow:none;
+  opacity:.985;
+  transition:transform var(--drawer-animation-speed) ease,visibility var(--drawer-animation-speed) ease,opacity var(--drawer-animation-speed) ease;
 }
+.drawer.open{opacity:1}
 .mobile-drawer{
   width:min(25rem,92vw);
   border-inline-start:0;
   border-inline-end:1px solid var(--shopify-color-2);
 }
+.scrim{
+  transition:opacity var(--drawer-animation-speed) ease,visibility var(--drawer-animation-speed) ease,backdrop-filter var(--drawer-animation-speed) ease;
+  backdrop-filter:brightness(1);
+}
+.scrim.open{backdrop-filter:brightness(.75)}
+
+/* Horizon's staggered navigation entrance. */
+.mobile-nav a{
+  --menu-drawer-animation-index:1;
+  will-change:transform,opacity;
+}
+.mobile-nav a:nth-child(2){--menu-drawer-animation-index:2}
+.mobile-nav a:nth-child(3){--menu-drawer-animation-index:3}
+.mobile-nav a:nth-child(4){--menu-drawer-animation-index:4}
+.mobile-nav a:nth-child(5){--menu-drawer-animation-index:5}
+.mobile-nav a:nth-child(6){--menu-drawer-animation-index:6}
+.mobile-nav a:nth-child(7){--menu-drawer-animation-index:7}
+.mobile-drawer.open .mobile-nav a{
+  animation:horizon-menu-drawer-nav-open var(--drawer-animation-speed) ease-in-out backwards;
+  animation-delay:calc(var(--drawer-animation-speed) + (var(--menu-drawer-animation-index) - 1) * .1s);
+}
+
+/* Search follows Horizon predictive-search slide/fade timings. */
 .search-panel{
   border-color:var(--shopify-color-2);
   box-shadow:none;
+  opacity:0;
+  transition:transform var(--animation-speed-medium) var(--animation-timing-fade-in),opacity var(--animation-speed-medium) var(--animation-timing-fade-in),visibility var(--animation-speed-medium) var(--animation-timing-fade-out);
+}
+.search-panel.open{opacity:1}
+.search-panel.open .search-row{
+  animation:horizon-element-slide-in-top var(--animation-speed) var(--animation-easing) both;
+}
+.search-panel.open .search-results > *{
+  animation:horizon-search-element-slide-in-bottom var(--animation-speed-medium) var(--animation-timing-bounce) backwards;
+}
+.search-panel.open .search-results > :nth-child(2){animation-delay:.03s}
+.search-panel.open .search-results > :nth-child(3){animation-delay:.06s}
+.search-panel.open .search-results > :nth-child(4){animation-delay:.09s}
+.search-panel.open .search-results > :nth-child(5){animation-delay:.12s}
+.search-panel.open .search-results > :nth-child(6){animation-delay:.15s}
+.search-panel.open .search-results > :nth-child(7){animation-delay:.18s}
+.search-panel.open .search-results > :nth-child(8){animation-delay:.21s}
+
+/* Cart and modal content use the same slide/fade language as Horizon dialogs. */
+#cartDrawer.open .drawer-head,
+#cartDrawer.open .drawer-body > *,
+.mobile-drawer.open .drawer-head{
+  animation:horizon-element-slide-in-top var(--animation-speed) var(--animation-easing) both;
+}
+.zoom-modal.open{
+  animation:horizon-fade-in var(--animation-speed) var(--animation-easing) both;
+}
+.zoom-modal.open img{
+  animation:horizon-element-slide-in-top var(--animation-speed) var(--animation-easing) both;
+}
+.sticky-buy.visible,
+.cookie-banner:not(.hidden){
+  animation:horizon-search-element-slide-in-bottom var(--animation-speed-slow) var(--animation-timing-fade-in) both;
+}
+
+/* Small cart-bubble pulse used by Horizon after cart state changes. */
+.cart-count.horizon-grow{
+  animation:horizon-grow .3s var(--animation-timing-bounce) both;
 }
 
 /* Forms: background, text and 1px border match settings_data.json. */
@@ -146,6 +231,7 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
 .field input,.field textarea{
   border:1px solid var(--shopify-color-2);
   border-radius:var(--shopify-input-radius);
+  transition:border-color var(--animation-speed) var(--animation-easing),box-shadow var(--animation-speed) var(--animation-easing);
 }
 .field input:focus,.field textarea:focus{
   border-color:var(--shopify-foreground);
@@ -168,6 +254,28 @@ input,textarea,select{border-radius:var(--shopify-input-radius)}
 }
 .cookie-banner{
   margin-bottom:var(--safe-area-inset-bottom);
+}
+
+/* Horizon keyframes copied/adapted from the exported theme. */
+@keyframes horizon-grow{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+}
+@keyframes horizon-menu-drawer-nav-open{
+  0%{visibility:hidden;opacity:0;transform:translateX(-.5rem)}
+  100%{visibility:visible;opacity:1;transform:translateX(0)}
+}
+@keyframes horizon-element-slide-in-top{
+  from{transform:translateY(8px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+@keyframes horizon-search-element-slide-in-bottom{
+  0%{transform:translateY(20px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+@keyframes horizon-fade-in{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 @media (max-width:749px){
