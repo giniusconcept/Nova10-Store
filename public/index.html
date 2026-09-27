@@ -8,6 +8,7 @@
   <meta name="description" content="NOVA10 — une sélection courte, utile et actuelle. Découvrez le Top 10 beauté, maison, tech, gaming et lifestyle.">
   <link rel="stylesheet" href="/assets/nova10.css">
   <link rel="stylesheet" href="/assets/shopify-horizon-compat.css">
+  <link rel="stylesheet" href="/assets/shopify-exact-parity.css?v=20260927-1">
 </head>
 <body>
   <div class="announcement">NOVA10 — une sélection courte, utile et actuelle</div>
@@ -99,13 +100,23 @@
   </footer>
 
   <div class="cookie-banner hidden" id="cookieBanner">
-    <h3>Votre confidentialité</h3>
-    <p>NOVA10 utilise uniquement les éléments nécessaires par défaut. Vous pouvez autoriser la mesure d’audience ou continuer sans traceurs non essentiels.</p>
+    <h3>Vos choix de confidentialité</h3>
+    <p>NOVA10 utilise les éléments strictement nécessaires au fonctionnement de la boutique. Les finalités d’analyse, de personnalisation et de marketing restent désactivées tant que vous ne les acceptez pas lorsqu’un consentement est requis.</p>
     <div class="cookie-actions"><button class="button secondary" data-consent="essential">Tout refuser</button><button class="button" data-consent="analytics">Tout accepter</button></div>
+    <button class="button secondary cookie-customize" id="cookieCustomize" type="button">Personnaliser</button>
+    <div class="cookie-preferences hidden" id="cookiePreferences">
+      <label><input id="cookieAnalytics" type="checkbox"> <span><strong>Mesure d’audience</strong><br>Comprendre l’utilisation de la boutique et améliorer son fonctionnement.</span></label>
+      <label><input id="cookiePrefs" type="checkbox"> <span><strong>Préférences</strong><br>Mémoriser certains choix non essentiels pour personnaliser l’expérience.</span></label>
+      <label><input id="cookieMarketing" type="checkbox"> <span><strong>Marketing</strong><br>Mesurer et personnaliser les campagnes publicitaires lorsque ces outils sont activés.</span></label>
+      <button class="button secondary" id="cookieSave" type="button">Enregistrer mes choix</button>
+    </div>
+    <p class="cookie-note">Vous pourrez modifier ces choix à tout moment.</p>
   </div>
+  <button id="cookieManage" class="cookie-manage hidden" type="button">Gérer mes cookies</button>
 
   <script src="/assets/nova10.js" defer></script>
   <script src="/assets/shopify-horizon-compat.js" defer></script>
+  <script src="/assets/shopify-exact-parity.js?v=20260927-1" defer></script>
   <script src="/assets/nova10-analytics-independent.js" defer></script>
 </body>
 </html>
