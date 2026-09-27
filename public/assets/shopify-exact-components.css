@@ -1,0 +1,303 @@
+/* NOVA10 Final — Horizon component parity layer
+   Ported from the recovered 490-file Shopify theme source. */
+
+:root{
+  --theme-drawer-width:30rem;
+  --drawer-padding:16px;
+  --component-speed:300ms;
+  --component-ease:cubic-bezier(.25,0,.1,1);
+  --popover-shadow:0 12px 42px rgba(0,0,0,.14);
+}
+
+/* =========================
+   Predictive search modal
+   ========================= */
+.search-panel{
+  position:fixed!important;
+  inset:0!important;
+  z-index:96!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  transition:opacity 160ms ease,visibility 160ms ease!important;
+}
+.search-panel.open{
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+.search-panel>.nova-page{
+  position:absolute;
+  left:50%;
+  top:calc(25dvh - 2rem);
+  transform:translate(-50%,24px);
+  width:66dvw;
+  max-width:120rem;
+  min-width:min(620px,calc(100vw - 32px));
+  margin:0;
+  padding:0;
+  background:#fff;
+  border:1px solid #DFDFDF;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:var(--popover-shadow);
+  opacity:0;
+  transition:transform 300ms cubic-bezier(.25,.46,.45,.94),opacity 220ms ease;
+}
+.search-panel.open>.nova-page{transform:translate(-50%,0);opacity:1}
+.search-row{
+  position:relative;
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  gap:0;
+  padding:2px 2px 0;
+  border-bottom:1px solid #DFDFDF;
+  background:#fff;
+}
+.search-row::before{
+  content:"";
+  position:absolute;
+  left:16px;
+  top:50%;
+  width:20px;height:20px;
+  transform:translateY(-50%);
+  background:no-repeat center/20px 20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='m16 16 4 4'/%3E%3C/svg%3E");
+  opacity:.62;
+  pointer-events:none;
+}
+.search-panel .search-input{
+  width:100%;
+  flex:1;
+  border:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  color:#000;
+  font:inherit;
+  font-size:1rem!important;
+  line-height:1.4;
+  letter-spacing:.03em;
+  padding:14px 10px 14px 48px!important;
+}
+.search-panel .search-input::placeholder{color:rgba(0,0,0,.55)}
+.search-panel #searchClose{
+  flex:0 0 44px;
+  width:44px;height:44px;
+  margin-right:4px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  font-size:24px;
+  font-weight:300;
+}
+.search-panel #searchClose:hover{background:#f3f3f3}
+.search-results{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:16px!important;
+  margin:0!important;
+  padding:16px!important;
+  max-height:50dvh!important;
+  overflow:auto!important;
+  background:#fff;
+}
+.search-result{
+  display:grid!important;
+  grid-template-columns:72px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  min-width:0;
+  padding:0!important;
+  border:0!important;
+}
+.search-result img{
+  width:72px!important;height:86px!important;
+  object-fit:cover!important;
+  border-radius:0!important;
+  background:#f5f5f5!important;
+}
+.search-result strong{
+  display:block;
+  font-size:.875rem!important;
+  line-height:1.35!important;
+  letter-spacing:0!important;
+  font-weight:500!important;
+}
+.search-result span{display:block;margin-top:4px!important;font-size:.875rem!important;line-height:1.35;color:#333!important}
+.search-view-all{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:10px 16px;
+  background:linear-gradient(to top,#fff,rgba(255,255,255,.95));
+  border-top:1px solid #eee;
+}
+.search-view-all .button{min-height:42px;padding:12px 20px}
+
+/* =========================
+   Empty Horizon cart drawer
+   ========================= */
+#cartDrawer.drawer{
+  top:0!important;bottom:0!important;right:0!important;
+  width:min(var(--theme-drawer-width),100vw)!important;
+  height:100dvh!important;
+  max-width:100%!important;
+  background:#fff!important;
+  border-left:1px solid #DFDFDF!important;
+  box-shadow:none!important;
+  transform:translateX(100%)!important;
+  transition:transform var(--component-speed) ease!important;
+}
+#cartDrawer.drawer.open{transform:translateX(0)!important}
+#cartDrawer .drawer-head{
+  height:auto!important;
+  min-height:82px!important;
+  padding:24px!important;
+  border-bottom:0!important;
+  flex-shrink:0;
+}
+#cartDrawer .drawer-title{
+  font-size:1.5rem!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  font-weight:700!important;
+  gap:8px!important;
+}
+#cartDrawer .drawer-title .cart-count{
+  min-width:22px!important;height:22px!important;
+  padding:0 7px!important;
+  background:rgba(0,0,0,.10)!important;
+  color:#000!important;
+  font-size:.75rem!important;
+}
+#cartDrawer .drawer-close{
+  width:34px!important;height:34px!important;
+  border-radius:50%!important;
+  border:1px solid rgba(0,0,0,.06)!important;
+  background:#fff!important;
+  box-shadow:0 2px 6px rgba(0,0,0,.06)!important;
+  font-size:24px!important;
+  line-height:1!important;
+}
+#cartDrawer .drawer-body{
+  display:flex!important;
+  flex:1!important;
+  min-height:0!important;
+  overflow:auto!important;
+  padding:0 24px 24px!important;
+}
+#cartDrawer .cart-empty{
+  width:100%!important;
+  min-height:100%!important;
+  height:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+#cartDrawer .cart-empty>div{width:100%;display:flex;flex-direction:column;align-items:center}
+#cartDrawer .cart-empty h2{
+  margin:0 0 18px!important;
+  font-size:1.5rem!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  font-weight:700!important;
+}
+#cartDrawer .cart-empty p{
+  max-width:26rem;
+  margin:0 0 18px!important;
+  color:#000!important;
+  font-size:14px!important;
+  line-height:1.6!important;
+  letter-spacing:.03em!important;
+}
+#cartDrawer .cart-empty p a{text-decoration:underline;text-underline-offset:3px}
+#cartDrawer .cart-items__empty-button{min-width:180px}
+
+/* Scrim/backdrop matches Horizon drawers/modal brightness */
+.scrim{background:rgba(0,0,0,.25)!important;backdrop-filter:brightness(.92);transition:opacity var(--component-speed) ease!important}
+
+/* =========================
+   Horizon mobile menu drawer
+   ========================= */
+#mobileDrawer.mobile-drawer{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  width:min(25rem,100vw)!important;
+  max-width:100%!important;
+  height:100dvh!important;
+  background:#fff!important;
+  border-right:1px solid #DFDFDF!important;
+  box-shadow:none!important;
+  transform:translateX(-100%)!important;
+  transition:transform var(--component-speed) ease!important;
+}
+#mobileDrawer.mobile-drawer.open{transform:translateX(0)!important}
+#mobileDrawer .drawer-head{
+  height:68px!important;
+  padding:12px 16px!important;
+  border-bottom:0!important;
+}
+#mobileDrawer .drawer-head .wordmark{visibility:hidden!important}
+#mobileDrawer .drawer-close{
+  margin-left:auto;
+  width:44px!important;height:44px!important;
+  border:0!important;border-radius:50%!important;background:transparent!important;
+  font-size:28px!important;
+}
+#mobileDrawer .drawer-body{padding:0!important;overflow:auto!important}
+#mobileDrawer .mobile-nav{display:grid!important;padding:0 16px 16px!important}
+#mobileDrawer .mobile-nav a{
+  display:flex!important;align-items:center!important;
+  min-height:52px!important;
+  padding:16px 7px!important;
+  border-bottom:1px solid #DFDFDF!important;
+  font-size:1rem!important;
+  line-height:1.25!important;
+  letter-spacing:0!important;
+  font-weight:500!important;
+}
+
+@media(max-width:749px){
+  .search-panel{background:#fff!important}
+  .search-panel>.nova-page{
+    inset:0!important;
+    transform:translateY(22px)!important;
+    width:100dvw!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:100dvh!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    display:flex;
+    flex-direction:column;
+  }
+  .search-panel.open>.nova-page{transform:translateY(0)!important}
+  .search-row{padding:4px 12px!important;min-height:60px!important}
+  .search-row::before{left:26px}
+  .search-panel .search-input{padding-left:48px!important}
+  .search-results{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:16px!important;
+    padding:18px 16px!important;
+    max-height:none!important;
+    flex:1;
+  }
+  .search-result{grid-template-columns:64px minmax(0,1fr)!important}
+  .search-result img{width:64px!important;height:76px!important}
+  #cartDrawer.drawer{width:100vw!important}
+}
+
+@media(max-width:420px){
+  .search-results{grid-template-columns:1fr!important}
+}
