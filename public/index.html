@@ -8,7 +8,8 @@
   <meta name="description" content="NOVA10 — une sélection courte, utile et actuelle. Découvrez le Top 10 beauté, maison, tech, gaming et lifestyle.">
   <link rel="stylesheet" href="/assets/nova10.css">
   <link rel="stylesheet" href="/assets/shopify-horizon-compat.css">
-  <link rel="stylesheet" href="/assets/shopify-exact-parity.css?v=20260927-1">
+  <link rel="stylesheet" href="/assets/shopify-exact-parity.css?v=20260927-2">
+  <link rel="stylesheet" href="/assets/shopify-exact-components.css?v=20260927-2">
 </head>
 <body>
   <div class="announcement">NOVA10 — une sélection courte, utile et actuelle</div>
@@ -59,17 +60,26 @@
   </aside>
 
   <aside class="drawer" id="cartDrawer" aria-label="Panier">
-    <div class="drawer-head"><span class="drawer-title">Panier <span class="cart-count" style="position:static">0</span></span><button class="drawer-close" id="cartClose" aria-label="Fermer">×</button></div>
-    <div class="drawer-body"><div class="cart-empty"><div><h2>Votre panier est vide</h2><p>Découvrez la sélection NOVA10.</p><a class="button" href="#/collection/top-10-nova10" onclick="document.getElementById('cartDrawer').classList.remove('open');document.getElementById('scrim').classList.remove('open');document.body.classList.remove('drawer-open')">Continuer mes achats</a></div></div></div>
+    <div class="drawer-head"><span></span><button class="drawer-close" id="cartClose" aria-label="Fermer">×</button></div>
+    <div class="drawer-body">
+      <div class="cart-empty">
+        <div>
+          <h2>Votre panier est vide</h2>
+          <p>Vous possédez un compte ? <a href="#/compte" data-account-placeholder>Connectez-vous</a> pour payer plus vite.</p>
+          <a class="button cart-items__empty-button" href="#/collection/top-10-nova10" onclick="document.getElementById('cartDrawer').classList.remove('open');document.getElementById('scrim').classList.remove('open');document.body.classList.remove('drawer-open')">Continuer vos achats</a>
+        </div>
+      </div>
+    </div>
   </aside>
 
-  <section class="search-panel" id="searchPanel" aria-label="Recherche">
+  <section class="search-panel" id="searchPanel" aria-label="Recherche" role="dialog" aria-modal="true">
     <div class="nova-page">
       <div class="search-row">
-        <input class="search-input" id="siteSearch" type="search" placeholder="Rechercher" aria-label="Rechercher un produit">
+        <input class="search-input" id="siteSearch" type="search" placeholder="Rechercher" aria-label="Rechercher un produit" autocomplete="off">
         <button class="icon-btn" id="searchClose" type="button" aria-label="Fermer la recherche">×</button>
       </div>
       <div class="search-results" id="searchResults"></div>
+      <div class="search-view-all"><button class="button" id="searchViewAll" type="button">Tout afficher</button></div>
     </div>
   </section>
 
@@ -116,7 +126,7 @@
 
   <script src="/assets/nova10.js" defer></script>
   <script src="/assets/shopify-horizon-compat.js" defer></script>
-  <script src="/assets/shopify-exact-parity.js?v=20260927-1" defer></script>
+  <script src="/assets/shopify-exact-parity.js?v=20260927-2" defer></script>
   <script src="/assets/nova10-analytics-independent.js" defer></script>
 </body>
 </html>
