@@ -1,0 +1,278 @@
+/* NOVA10 Final — visual parity overrides from the merchant's Shopify captures, 2026-09-27. */
+
+/* The Shopify capture uses the compact Horizon announcement/header already
+   defined by the recovered theme. Keep those dimensions and correct the
+   homepage-specific composition below. */
+
+.shopify-reference-hero{
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:0;
+}
+.shopify-reference-hero .hero-frame{
+  width:100%;
+  height:52vh;
+  min-height:420px;
+  max-height:520px;
+  display:block;
+  position:relative;
+  overflow:hidden;
+  background:#111;
+}
+.shopify-reference-hero .hero-media-single{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.shopify-reference-hero .hero-media-single img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+}
+.shopify-reference-hero .hero-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.34);
+}
+.shopify-reference-hero .hero-content{
+  position:absolute;
+  inset:0;
+  left:0;
+  right:0;
+  width:100%;
+  transform:none;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
+  text-align:center;
+  color:#fff;
+}
+.shopify-reference-hero .hero-content h1{
+  margin:0;
+  max-width:900px;
+  color:#fff;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:clamp(2.25rem,3vw,2.8rem);
+  line-height:1.08;
+  font-weight:700;
+  letter-spacing:-.025em;
+}
+.shopify-reference-hero .hero-shop-button{
+  min-height:50px;
+  padding:0 24px;
+  border:1px solid rgba(255,255,255,.92)!important;
+  border-radius:13px!important;
+  background:transparent!important;
+  color:#fff!important;
+  box-shadow:none!important;
+  font-size:13px;
+  font-weight:400;
+}
+.shopify-reference-hero .hero-shop-button:hover{
+  background:rgba(255,255,255,.08)!important;
+}
+
+/* Homepage product section visible in the Shopify capture. */
+.shopify-home-products{
+  padding-top:40px;
+  padding-bottom:56px;
+}
+.shopify-home-products .section-head{
+  align-items:center;
+  margin-bottom:24px;
+}
+.shopify-home-products .section-head h2{
+  margin:0;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:1.45rem;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+.shopify-home-products .view-all{
+  font-size:13px;
+  line-height:1.4;
+}
+.shopify-home-products .product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  column-gap:8px;
+  row-gap:34px;
+  margin-top:0;
+}
+.shopify-home-products .product-card{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+  position:relative;
+  align-self:start;
+}
+.shopify-home-products .product-media{
+  width:100%;
+  height:auto;
+  border-radius:0;
+  overflow:visible;
+  background:#fff;
+  position:relative;
+}
+.shopify-home-products .product-media img{
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:contain;
+  object-position:center;
+  border-radius:0;
+}
+.shopify-home-products .sold-chip{
+  position:absolute;
+  top:8px;
+  right:8px;
+  left:auto;
+  bottom:auto;
+  padding:6px 10px;
+  border:0;
+  border-radius:999px;
+  background:#eef0e9;
+  color:#171717;
+  font-size:12px;
+  line-height:1;
+  font-weight:500;
+}
+.shopify-home-products .product-title{
+  margin:0;
+  padding-top:7px;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:400;
+  letter-spacing:0;
+}
+.shopify-home-products .product-price{
+  margin:0;
+  font-size:12px;
+  line-height:1.4;
+  font-weight:500;
+  letter-spacing:0;
+}
+
+/* Newsletter area shown directly below the product grid in the Shopify capture. */
+.site-footer{
+  border-top:0;
+}
+.screenshot-newsletter{
+  display:grid;
+  grid-template-columns:minmax(280px,.9fr) minmax(480px,1.35fr);
+  align-items:center;
+  column-gap:64px;
+  padding-top:46px;
+  padding-bottom:38px;
+  border-top:0;
+  border-bottom:1px solid #e4e4e4;
+}
+.screenshot-newsletter .newsletter-copy h3{
+  margin:0 0 5px;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:1.45rem;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+.screenshot-newsletter .newsletter-copy p{
+  margin:0;
+  font-size:13px;
+  line-height:1.5;
+  color:#111;
+}
+.screenshot-newsletter .newsletter-form-only{
+  width:100%;
+}
+.screenshot-newsletter .email-pill{
+  width:100%;
+  max-width:none;
+  height:54px;
+  border:1px solid #dedede;
+  border-radius:999px;
+  padding-left:22px;
+  background:#fff;
+}
+.screenshot-newsletter .email-pill input{
+  font-size:13px;
+  color:#111;
+}
+.screenshot-newsletter .email-pill input::placeholder{
+  color:#858585;
+  opacity:1;
+}
+.screenshot-newsletter .email-pill button{
+  width:54px;
+  height:52px;
+  font-size:22px;
+}
+.footer-secondary{
+  padding-top:22px;
+  padding-bottom:8px;
+}
+.footer-secondary .footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 22px;
+}
+.footer-secondary .footer-links a,
+.footer-secondary .footer-links .tool-btn{
+  font-size:12px;
+  line-height:1.5;
+  color:#444;
+}
+.footer-utils{
+  padding-top:14px;
+  padding-bottom:28px;
+}
+
+@media(max-width:900px){
+  .shopify-reference-hero .hero-frame{
+    height:50svh;
+    min-height:360px;
+    max-height:500px;
+  }
+  .shopify-home-products .product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:12px;
+    row-gap:28px;
+  }
+  .screenshot-newsletter{
+    grid-template-columns:1fr;
+    row-gap:22px;
+  }
+}
+
+@media(max-width:749px){
+  .shopify-reference-hero .hero-frame{
+    height:55svh;
+    min-height:350px;
+  }
+  .shopify-reference-hero .hero-content{
+    padding:20px 18px;
+    gap:18px;
+  }
+  .shopify-reference-hero .hero-content h1{
+    font-size:clamp(2rem,9vw,2.65rem);
+  }
+  .shopify-home-products{
+    padding-top:30px;
+    padding-bottom:42px;
+  }
+  .shopify-home-products .section-head h2,
+  .screenshot-newsletter .newsletter-copy h3{
+    font-size:1.3rem;
+  }
+  .screenshot-newsletter{
+    padding-top:34px;
+    padding-bottom:30px;
+  }
+}
