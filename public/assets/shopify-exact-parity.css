@@ -1,0 +1,233 @@
+/* NOVA10 Final — exact Horizon source-parity overrides
+   Source of truth: the 490-file Shopify theme export recovered 2026-09-27.
+   This file intentionally loads after the compatibility layer. */
+
+:root{
+  --page-width:90rem;
+  --page-margin:16px;
+  --bg:#ffffff;
+  --fg:#000000;
+  --muted:#333333;
+  --line:#DFDFDF;
+  --soft:#f6f6f6;
+  --btn-radius:14px;
+  --card-radius:14px;
+  --header-h:60px;
+  --announcement-h:39px;
+  --section-height-small:15rem;
+  --section-height-medium:25rem;
+  --section-height-large:35rem;
+  --font-h1-size:clamp(3rem,5.6vw,3.5rem);
+  --font-h2-size:clamp(2.25rem,4.8vw,3rem);
+  --font-h3-size:2rem;
+  --font-h4-size:1.5rem;
+  --font-h5-size:.875rem;
+  --font-h6-size:.75rem;
+}
+
+@media (min-width:750px){:root{--page-margin:40px}}
+@media (min-width:40em){:root{--section-height-small:40svh;--section-height-medium:55svh;--section-height-large:70svh}}
+@media (min-width:60em){:root{--section-height-small:50svh;--section-height-medium:65svh;--section-height-large:80svh}}
+
+html{scroll-behavior:smooth}
+body{font-size:14px;line-height:1.6;letter-spacing:.03em;color:#000;background:#fff}
+.nova-page{width:min(calc(100% - (var(--page-margin) * 2)),var(--page-width));margin-inline:auto}
+
+/* Typography from config/settings_data.json */
+h1{font-size:var(--font-h1-size);line-height:1;letter-spacing:0;font-weight:700}
+h2{font-size:var(--font-h2-size);line-height:1;letter-spacing:0;font-weight:700}
+h3{font-size:var(--font-h3-size);line-height:1.1;letter-spacing:0;font-weight:700}
+h4{font-size:var(--font-h4-size);line-height:1;letter-spacing:0;font-weight:700}
+h5{font-size:var(--font-h5-size);line-height:1.2;letter-spacing:0;font-weight:500}
+h6{font-size:var(--font-h6-size);line-height:1.2;letter-spacing:0;font-weight:500}
+
+/* Announcement bar: section_width=page-width, 12px block padding, 1px divider */
+.announcement{
+  height:auto;min-height:var(--announcement-h);padding:12px var(--page-margin);
+  border-bottom:1px solid #DFDFDF;background:#fff;color:#000;
+  font-size:.75rem;line-height:1.2;letter-spacing:0;font-weight:500;
+}
+
+/* Header: exact custom NOVA10 logo + standard 60px Horizon row */
+.site-header{height:60px;background:#fff;border-bottom:0;position:sticky;top:0;z-index:65}
+.site-header::after{content:"";position:absolute;left:var(--page-margin);right:var(--page-margin);bottom:0;height:1px;background:#DFDFDF}
+.header-inner{height:60px;gap:24px}
+.wordmark{
+  min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:1.25rem;font-weight:800;letter-spacing:.08em;line-height:1;
+}
+.desktop-nav{gap:20px}
+.desktop-nav a{font-size:.875rem;line-height:1.4;letter-spacing:0;padding-block:20px}
+.desktop-nav a:after{bottom:12px}
+.header-actions{gap:2px}
+.icon-btn{width:44px;height:44px}
+.icon-btn svg{width:20px;height:20px;stroke-width:1.7}
+
+/* Exact buttons: no vertical translation on hover */
+.button{
+  min-height:48px;padding:16px 24px;border-radius:14px;border:0;
+  background:#000;color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400;line-height:1;letter-spacing:.03em;
+  transition:color .125s ease-in-out,background-color .125s ease-in-out,box-shadow .125s ease-in-out,opacity .125s ease-in-out;
+}
+.button:hover{transform:none}
+.button.secondary{background:transparent;color:#000;border:1px solid #000}
+.button:disabled,.button.disabled{transform:none}
+
+/* HOME HERO — exact Horizon geometry.
+   Media is full width; only content is constrained to the narrow page width. */
+.home-hero.nova-page{width:100%;max-width:none;margin:0;padding:0}
+.hero-frame{
+  width:100%;height:auto;min-height:calc(var(--section-height-large) - 60px);
+  position:relative;overflow:hidden;background:#111;display:grid;grid-template-columns:repeat(2,1fr);
+}
+.hero-media{position:relative;min-width:0;overflow:hidden}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.40),rgba(0,0,0,0));pointer-events:none}
+.hero-content{
+  position:absolute;z-index:2;inset-block:0;left:50%;right:auto;transform:translateX(-50%);
+  width:min(calc(100% - (var(--page-margin) * 2)),var(--page-width));
+  padding:48px 0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px;color:#fff;
+}
+.hero-content h1{font-size:var(--font-h1-size);line-height:1;letter-spacing:0;margin:0;max-width:19.5em;font-weight:700;text-wrap:pretty}
+.hero-content p{font-size:1rem;line-height:1.6;letter-spacing:.03em;margin:0 0 8px;max-width:32.5em}
+.hero-content .button{background:#fff;color:#000}
+
+/* Homepage section headings */
+.section-head{gap:12px}
+.section-head h2{font-size:2rem;line-height:1.1;letter-spacing:0;font-weight:700}
+.section-head .view-all{font-size:14px;line-height:1.6;letter-spacing:.03em;padding-bottom:0}
+
+/* Univers NOVA10 exact settings */
+.collections-section{padding-top:56px;padding-bottom:24px}
+.collection-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.collection-card{border-radius:14px;aspect-ratio:4/3}
+.collection-card img{transition:none}
+.collection-card:hover img{transform:none}
+.collection-card-title{
+  left:0;bottom:0;margin:0 0 0 0;background:#fff;color:#000;padding:6px 10px;
+  font-size:.875rem;font-weight:500;line-height:1.2;letter-spacing:0;border-radius:0;
+}
+
+/* Top 10 homepage exact card settings */
+.products-section{padding-top:32px;padding-bottom:64px}
+.products-section .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:28px;margin-top:24px}
+.products-section .product-card{gap:6px}
+.products-section .product-media{border-radius:14px}
+.product-media img{transition:none}
+.product-card:hover .product-media img{transform:none}
+.product-title{font-size:1rem;line-height:1.4;letter-spacing:0;font-weight:400;padding-top:6px}
+.product-price{font-size:1rem;line-height:1.4;letter-spacing:0;font-weight:400}
+.sold-chip{
+  left:auto;right:10px;top:10px;bottom:auto;background:#eef1ea;color:#000;
+  padding:5px 8px;border-radius:100px;border:0;font-size:.75rem;line-height:1.2;font-weight:500;
+}
+
+/* Collection template exact settings */
+.page-heading{padding-top:48px;padding-bottom:48px;display:flex;flex-direction:column;gap:12px}
+.page-heading h1{font-size:var(--font-h2-size);line-height:1;letter-spacing:0;margin:0;font-weight:400;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-heading p{font-size:14px;line-height:1.6;letter-spacing:.03em;max-width:32.5em;margin:0;color:#000}
+.collection-tools{min-height:auto;border-block:0;border-bottom:1px solid #DFDFDF;padding-block:8px;margin-bottom:8px}
+.tools-left,.tools-right{gap:20px}
+.tool-btn{font-size:14px;line-height:1.4;letter-spacing:0;padding:8px 0}
+.collection-route-grid{padding-bottom:32px}
+.collection-route-grid .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:16px;row-gap:24px;margin-top:0}
+.collection-route-grid .product-card{gap:4px}
+.collection-route-grid .product-media{border-radius:0}
+.collection-route-grid .product-title{padding-top:4px}
+.collection-route-grid .sold-chip{right:8px;top:8px}
+
+/* Product template exact settings */
+.product-page.nova-page{width:min(calc(100% - (var(--page-margin) * 2)),var(--page-width))}
+.product-layout{grid-template-columns:minmax(0,1fr) minmax(360px,1fr);gap:48px;align-items:start}
+.product-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.product-main-image{grid-column:1/-1;background:#fff;min-height:0;border:0;padding:0;border-radius:0}
+.product-main-image img{width:100%;height:min(82vh,900px);object-fit:contain;border-radius:0}
+.product-details{top:calc(60px + 24px);padding:24px 0;gap:28px}
+.product-details-header{gap:12px}
+.product-details h1{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;line-height:1.4;letter-spacing:0;font-weight:400;margin:0}
+.product-page-price{font-size:1rem;line-height:1.4;letter-spacing:0;margin:4px 0 0;font-weight:400}
+.product-divider{height:1px;background:#DFDFDF}
+.qty-row{gap:8px}.qty-label{font-size:14px;line-height:1.4;font-weight:400}
+.qty{width:135px;height:48px;border:1px solid #000;border-radius:0}
+.qty button{font-size:19px}.buy-stack{gap:10px}
+.product-description{font-size:1rem;line-height:1.6;letter-spacing:.03em;color:#000}
+.disclosure{border-top:1px solid #DFDFDF;padding-top:0}
+.disclosure summary{font-size:.75rem;line-height:1.2;font-weight:500;padding:16px 0}
+.recommendations{padding:48px 0}
+.recommendations h3{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;line-height:1.4;letter-spacing:0;font-weight:400;margin:0 0 28px}
+.recommendations .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:24px;margin-top:0}
+.recommendations .product-card{gap:8px;padding-bottom:8px}
+.recommendations .product-media{border-radius:0}
+.recommendations .product-title{padding-top:4px}
+.zoom-modal img{border-radius:0}
+
+/* Generic pages use Horizon type scale and narrow page grid */
+.generic-page{padding-top:40px;padding-bottom:80px;max-width:900px}
+.generic-page h1{font-size:var(--font-h2-size);line-height:1;letter-spacing:0;margin:0 0 32px}
+.generic-page h2{font-size:2rem;line-height:1.1;letter-spacing:0;margin:38px 0 12px}
+.generic-page h3{font-size:1.5rem;line-height:1;letter-spacing:0;margin:28px 0 10px}
+.generic-page p,.generic-page li{font-size:14px;line-height:1.6;letter-spacing:.03em;color:#000}
+.field input,.field textarea{border:1px solid #DFDFDF;border-radius:4px}
+
+/* Footer group exact spacing */
+.site-footer{border-top:1px solid #DFDFDF;background:#fff}
+.footer-main{padding-top:40px;padding-bottom:40px;gap:32px}
+.footer-menu-title{font-size:.875rem;line-height:1.2;font-weight:500;margin-bottom:14px;letter-spacing:0}
+.footer-links{gap:10px}
+.footer-links a,.footer-links .tool-btn{font-size:14px;line-height:1.6;letter-spacing:.03em}
+.newsletter h3{font-size:1.5rem;line-height:1;letter-spacing:0}
+.newsletter p{font-size:14px;line-height:1.6;letter-spacing:.03em}
+.email-pill{border:1px solid #DFDFDF;border-radius:100px;overflow:hidden}
+.footer-utils{border-top:1px solid #DFDFDF;padding-top:20px;padding-bottom:36px;font-size:.75rem;line-height:1.2}
+
+/* Consent banner: exact NOVA10 theme presentation */
+.cookie-banner{
+  position:fixed!important;left:16px!important;right:16px!important;bottom:16px!important;z-index:2147483000!important;
+  max-width:720px!important;margin:auto!important;background:#fff!important;color:#111!important;
+  border:1px solid rgba(0,0,0,.18)!important;border-radius:16px!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.22)!important;padding:20px!important;font:inherit!important;
+}
+.cookie-banner h3{margin:0 0 8px!important;font-size:1.25rem!important;line-height:1.2!important}
+.cookie-banner p{margin:0 0 14px!important;line-height:1.45!important;letter-spacing:0!important}
+.cookie-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:14px!important}
+.cookie-actions .button{min-height:44px!important;border-radius:10px!important;padding:10px 14px!important;font-weight:700!important}
+
+/* Responsive behavior derived from Horizon settings */
+@media (max-width:1100px){
+  .desktop-nav{gap:14px}.desktop-nav a{font-size:13px}
+}
+@media (max-width:900px){
+  .desktop-nav{display:none}.menu-btn{display:grid}
+  .header-inner{grid-template-columns:auto 1fr auto}
+  .wordmark{justify-self:start}
+  .collection-grid,.products-section .product-grid,.collection-route-grid .product-grid,.recommendations .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-layout{grid-template-columns:1fr;gap:28px}
+  .product-details{position:static;padding-top:16px}
+  .product-gallery{grid-template-columns:1fr}
+  .contact-form-wrap{width:auto;min-width:0;margin-inline:var(--page-margin)}
+}
+@media (max-width:749px){
+  .wordmark{font-size:1.15rem}
+  .account-btn{display:none}
+  .hero-frame{min-height:var(--section-height-large);grid-template-columns:repeat(2,1fr)}
+  .hero-content{padding:48px 0}
+  .hero-content h1{font-size:var(--font-h1-size)}
+  .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .products-section .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .collection-route-grid .product-grid,.recommendations .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-main{grid-template-columns:1fr;gap:32px}
+  .search-results{grid-template-columns:1fr 1fr}
+}
+@media (max-width:520px){
+  .cookie-banner{left:10px!important;right:10px!important;bottom:10px!important;padding:16px!important}
+  .cookie-actions{grid-template-columns:1fr!important}
+  .search-results{grid-template-columns:1fr}
+  .hero-content p{font-size:1rem}
+}
+
+/* User preference parity */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
