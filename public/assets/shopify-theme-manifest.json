@@ -1,0 +1,47 @@
+{
+  "source": "NOVA10 Final",
+  "shopifyPreset": "Horizon",
+  "exportedThemeFileCount": 490,
+  "compatibilityTarget": "independent-cloudflare-storefront",
+  "designTokens": {
+    "pageWidth": "90rem",
+    "background": "#ffffff",
+    "foreground": "#000000",
+    "color1": "#333333",
+    "color2": "#DFDFDF",
+    "bodyFont": "Inter 400",
+    "subheadingFont": "Inter 500",
+    "headingFont": "Inter 700",
+    "h1": "56px",
+    "h2": "48px",
+    "primaryButtonRadius": 14,
+    "secondaryButtonRadius": 14,
+    "inputRadius": 4,
+    "cartType": "drawer",
+    "cardHoverEffect": "none"
+  },
+  "homepage": {
+    "hero": {
+      "height": "large",
+      "images": ["nova10-crossbody.jpg", "nova10-gaming-controller.jpg"],
+      "overlay": "gradient",
+      "heading": "NOVA10 — le meilleur du moment, sans catalogue inutile."
+    },
+    "collections": ["beaute", "maison-outdoor", "tech-gaming", "lifestyle-voyage"],
+    "productCollection": "top-10-nova10",
+    "productColumnsDesktop": 4,
+    "productColumnsMobile": 2
+  },
+  "standardsApplied": [
+    "safe-area-insets",
+    "responsive-page-width",
+    "shopify-horizon-section-heights",
+    "focus-visible",
+    "reduced-motion",
+    "drawer-accessibility",
+    "44px-touch-targets",
+    "theme-button-tokens",
+    "theme-input-tokens",
+    "no-card-hover-effect"
+  ]
+}
