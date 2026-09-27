@@ -1,0 +1,187 @@
+/* NOVA10 — Horizon compatibility layer
+   Source: exported Shopify theme NOVA10 Final / Horizon.
+   Purpose: keep the independent Cloudflare storefront aligned with the
+   design, spacing, accessibility and responsive conventions of the Shopify theme. */
+
+:root{
+  --safe-area-inset-top:env(safe-area-inset-top,0px);
+  --safe-area-inset-right:env(safe-area-inset-right,0px);
+  --safe-area-inset-bottom:env(safe-area-inset-bottom,0px);
+  --safe-area-inset-left:env(safe-area-inset-left,0px);
+  --narrow-page-width:90rem;
+  --normal-page-width:120rem;
+  --wide-page-width:150rem;
+  --section-height-small:15rem;
+  --section-height-medium:25rem;
+  --section-height-large:35rem;
+  --minimum-touch-target:44px;
+  --focus-outline-width:2px;
+  --focus-outline-offset:3px;
+  --shopify-background:#fff;
+  --shopify-foreground:#000;
+  --shopify-color-1:#333;
+  --shopify-color-2:#dfdfdf;
+  --shopify-primary-radius:14px;
+  --shopify-secondary-radius:14px;
+  --shopify-input-radius:4px;
+}
+
+@media (min-width:40em){
+  :root{
+    --section-height-small:40svh;
+    --section-height-medium:55svh;
+    --section-height-large:70svh;
+  }
+}
+
+@media (min-width:60em){
+  :root{
+    --section-height-small:50svh;
+    --section-height-medium:65svh;
+    --section-height-large:80svh;
+  }
+}
+
+html{
+  scrollbar-width:thin;
+  scrollbar-color:rgb(0 0 0 / .4) transparent;
+}
+
+body{
+  background:var(--shopify-background);
+  color:var(--shopify-foreground);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-variation-settings:'slnt' 0;
+}
+
+img,picture,video,canvas,svg{display:block;max-width:100%}
+input,textarea,select{border-radius:var(--shopify-input-radius)}
+
+*:focus-visible{
+  outline:var(--focus-outline-width) solid currentColor;
+  outline-offset:var(--focus-outline-offset);
+}
+
+.nova-page{
+  --page-margin:max(16px,var(--safe-area-inset-left),var(--safe-area-inset-right));
+  width:min(var(--narrow-page-width),calc(100% - (var(--page-margin) * 2)));
+  margin-inline:auto;
+}
+
+@media (min-width:750px){
+  .nova-page{
+    --page-margin:max(40px,var(--safe-area-inset-left),var(--safe-area-inset-right));
+  }
+}
+
+/* Theme settings: card_hover_effect = none */
+.collection-card img,
+.product-media img{
+  transform:none!important;
+}
+.collection-card:hover img,
+.product-card:hover .product-media img{
+  transform:none!important;
+}
+
+/* Theme settings: primary/secondary buttons */
+.button{
+  min-height:var(--minimum-touch-target);
+  border-radius:var(--shopify-primary-radius);
+  background:var(--shopify-foreground);
+  color:var(--shopify-background);
+  box-shadow:none;
+  transform:none!important;
+}
+.button:hover:not(:disabled){opacity:.82}
+.button.secondary{
+  border:1px solid var(--shopify-foreground);
+  border-radius:var(--shopify-secondary-radius);
+  background:transparent;
+  color:var(--shopify-foreground);
+}
+
+.icon-btn,.drawer-close,.zoom-close{
+  min-width:var(--minimum-touch-target);
+  min-height:var(--minimum-touch-target);
+}
+
+/* Exact section-height convention from the exported Horizon variables. */
+.hero-frame{
+  height:auto;
+  min-height:var(--section-height-large);
+}
+
+/* Preserve Shopify theme's 56px H1 and responsive hierarchy. */
+.hero-content h1{
+  font-size:clamp(2.5rem,5vw,3.5rem);
+  line-height:1.03;
+  letter-spacing:-.045em;
+}
+.page-heading h1,.generic-page h1{
+  font-size:clamp(2.25rem,4vw,3rem);
+}
+
+/* Shopify drawer / popover visual conventions. */
+.drawer{
+  width:min(30rem,100vw);
+  border-inline-start:1px solid var(--shopify-color-2);
+  box-shadow:none;
+}
+.mobile-drawer{
+  width:min(25rem,92vw);
+  border-inline-start:0;
+  border-inline-end:1px solid var(--shopify-color-2);
+}
+.search-panel{
+  border-color:var(--shopify-color-2);
+  box-shadow:none;
+}
+
+/* Forms: background, text and 1px border match settings_data.json. */
+.field input,.field textarea,.email-pill,.search-input{
+  background:var(--shopify-background);
+  color:var(--shopify-color-1);
+}
+.field input,.field textarea{
+  border:1px solid var(--shopify-color-2);
+  border-radius:var(--shopify-input-radius);
+}
+.field input:focus,.field textarea:focus{
+  border-color:var(--shopify-foreground);
+}
+
+/* Product/collection cards from the exported home template use 14px radius. */
+.collection-card,.product-media{
+  border-radius:14px;
+}
+
+/* Header and footer dividers from header-group/footer-group. */
+.announcement,.site-header,.site-footer,.footer-utils{
+  border-color:var(--shopify-color-2);
+}
+
+/* Keep interactive content clear of device safe areas. */
+.drawer-head{
+  padding-inline-start:max(28px,var(--safe-area-inset-left));
+  padding-inline-end:max(28px,var(--safe-area-inset-right));
+}
+.cookie-banner{
+  margin-bottom:var(--safe-area-inset-bottom);
+}
+
+@media (max-width:749px){
+  .hero-content{padding:24px}
+  .hero-frame{min-height:35rem}
+  .collection-grid,.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
