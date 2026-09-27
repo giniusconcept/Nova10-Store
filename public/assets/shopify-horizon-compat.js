@@ -107,15 +107,106 @@
     document.addEventListener('pointercancel', clear);
   }
 
+  /*
+   * The original Horizon archive contains its most visible content motion in
+   * product-grid/search/drawer components. Shopify normally activates those
+   * effects when a section/component is hydrated or updated. Our independent
+   * storefront renders routes with plain JavaScript, so those component hooks
+   * do not exist. This adapter re-attaches the same fadeInUp / slide language
+   * to the equivalent NOVA10 DOM nodes, including on scroll and route changes.
+   */
+  function installVisibleMotionStyles() {
+    if ($('#nova10-horizon-visible-motion')) return;
+    const style = document.createElement('style');
+    style.id = 'nova10-horizon-visible-motion';
+    style.textContent = `
+      @media (prefers-reduced-motion:no-preference){
+        .horizon-motion-enter{opacity:0;transform:translateY(10px);will-change:opacity,transform}
+        .horizon-motion-enter.horizon-motion-visible{animation:horizon-visible-fade-in-up .42s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--horizon-motion-delay,0ms)}
+        .hero-media.horizon-motion-enter{transform:translateY(12px) scale(1.008)}
+        .hero-media.horizon-motion-enter.horizon-motion-visible{animation:horizon-visible-hero-in .52s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--horizon-motion-delay,0ms)}
+        .announcement.horizon-motion-immediate{animation:horizon-visible-header-in .30s cubic-bezier(.16,1,.3,1) both}
+        .site-header.horizon-motion-immediate{animation:horizon-visible-header-in .36s cubic-bezier(.16,1,.3,1) .04s both}
+        @keyframes horizon-visible-fade-in-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes horizon-visible-hero-in{from{opacity:0;transform:translateY(12px) scale(1.008)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @keyframes horizon-visible-header-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  let visibleMotionObserver;
+
+  function getVisibleMotionObserver() {
+    if (visibleMotionObserver || reducedMotion.matches) return visibleMotionObserver;
+    if (!('IntersectionObserver' in window)) return null;
+    visibleMotionObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('horizon-motion-visible');
+        visibleMotionObserver.unobserve(entry.target);
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+    return visibleMotionObserver;
+  }
+
+  function prepareVisibleMotion(root = document) {
+    const selectors = [
+      '.hero-media',
+      '.hero-content > *',
+      '.section-head',
+      '.collection-card',
+      '.product-card',
+      '.page-heading > *',
+      '.collection-tools',
+      '.product-main-image',
+      '.product-details > *',
+      '.recommendations > h3',
+      '.generic-page > *',
+      '.contact-intro > *',
+      '.contact-form-wrap'
+    ].join(',');
+
+    const nodes = $$(selectors, root).filter(el => !el.dataset.horizonMotionPrepared);
+    if (!nodes.length) return;
+
+    nodes.forEach((el, index) => {
+      el.dataset.horizonMotionPrepared = 'true';
+      if (reducedMotion.matches) return;
+      el.classList.add('horizon-motion-enter');
+      el.style.setProperty('--horizon-motion-delay', `${Math.min(index % 8, 7) * 45}ms`);
+      const observer = getVisibleMotionObserver();
+      if (observer) observer.observe(el);
+      else requestAnimationFrame(() => el.classList.add('horizon-motion-visible'));
+    });
+  }
+
+  function watchRouteMotion() {
+    const app = $('#app');
+    if (!app) return;
+    prepareVisibleMotion(app);
+    const observer = new MutationObserver(() => {
+      requestAnimationFrame(() => prepareVisibleMotion(app));
+    });
+    observer.observe(app, { childList: true, subtree: true });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.dataset.themeStandard = 'shopify-horizon';
     document.documentElement.dataset.themeSource = 'nova10-final';
-    document.documentElement.dataset.horizonMotion = 'restored';
+    document.documentElement.dataset.horizonMotion = 'visible-restored';
+
+    installVisibleMotionStyles();
+    if (!reducedMotion.matches) {
+      $('.announcement')?.classList.add('horizon-motion-immediate');
+      $('.site-header')?.classList.add('horizon-motion-immediate');
+    }
 
     pairs.forEach(setDialogSemantics);
     animateCartCount();
     replaySearchResults();
     setPressedMotion();
+    watchRouteMotion();
 
     $$('.cart-count').forEach(el => {
       el.setAttribute('aria-live', 'polite');
