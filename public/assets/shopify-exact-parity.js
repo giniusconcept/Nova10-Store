@@ -12,6 +12,8 @@
     style.id='nova10-exact-runtime-style';
     style.textContent=`
       .hero-frame{min-height:calc(var(--section-height-large) - var(--header-group-h,99px))!important}
+      .collection-card-title{left:16px!important;bottom:16px!important}
+      .product-page .sticky-buy{display:none!important}
       .cookie-customize{width:100%;margin-top:10px;min-height:44px!important;border-radius:10px!important;font-weight:700!important}
       .cookie-preferences{margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,.15)}
       .cookie-preferences label{display:flex;gap:10px;align-items:flex-start;margin:10px 0;line-height:1.35;letter-spacing:0}
@@ -20,6 +22,13 @@
       .cookie-note{margin-top:10px!important;font-size:.85rem!important}
       .cookie-manage{position:fixed;left:14px;bottom:14px;z-index:2147482000;border:1px solid rgba(0,0,0,.25);border-radius:999px;background:#fff;color:#111;padding:9px 12px;font:inherit;font-size:.85rem;box-shadow:0 6px 20px rgba(0,0,0,.12);cursor:pointer}
       @media(max-width:749px){
+        .header-inner{grid-template-columns:44px 44px minmax(0,1fr) 44px 44px!important;grid-template-areas:'menu search logo account cart'!important;gap:0!important;align-items:center!important}
+        #menuOpen{grid-area:menu!important;display:grid!important;justify-self:start!important;padding-inline:0!important}
+        .wordmark{grid-area:logo!important;justify-self:center!important;font-size:1.15rem!important}
+        .header-actions{display:contents!important}
+        #searchOpen{grid-area:search!important;justify-self:center!important}
+        .account-btn{grid-area:account!important;display:grid!important;justify-self:center!important}
+        #cartOpen{grid-area:cart!important;justify-self:end!important}
         .footer-info.is-horizon-accordion .footer-menu-title{position:relative;cursor:pointer;padding:10px 28px 10px 0;margin:0;border-bottom:1px solid #DFDFDF}
         .footer-info.is-horizon-accordion .footer-menu-title::after{content:'+';position:absolute;right:2px;top:50%;translate:0 -50%;font-size:20px;font-weight:400}
         .footer-info.is-horizon-accordion.is-open .footer-menu-title::after{content:'−'}
@@ -42,6 +51,9 @@
 
     /* Shopify hides accelerated checkout whenever the selected variant cannot be added. */
     $$('.product-page .accelerated').forEach(el=>{ el.hidden=true; el.style.display='none'; });
+
+    /* All NOVA10 products are currently unavailable, so Horizon also hides its sticky ATC bar. */
+    $$('.product-page .sticky-buy').forEach(el=>{ el.hidden=true; el.style.display='none'; });
 
     /* The source theme has no configured card hover effect. */
     $$('.product-card,.collection-card').forEach(el=>el.dataset.horizonHover='none');
@@ -120,7 +132,7 @@
     window.addEventListener('resize',syncHeaderHeight,{passive:true});
     window.addEventListener('hashchange',()=>requestAnimationFrame(normalizeRenderedStorefront));
     document.documentElement.dataset.nova10ExactTheme='NOVA10-Final-Horizon-490-files';
-    document.documentElement.dataset.nova10ParityRuntime='2.0.0';
+    document.documentElement.dataset.nova10ParityRuntime='2.1.0';
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
