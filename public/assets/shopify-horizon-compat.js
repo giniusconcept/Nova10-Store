@@ -1,7 +1,8 @@
-/* NOVA10 — Horizon interaction/accessibility compatibility layer */
+/* NOVA10 — Horizon interaction/accessibility/motion compatibility layer */
 (() => {
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const pairs = [
     { trigger: '#menuOpen', panel: '#mobileDrawer', close: '#menuClose' },
@@ -61,11 +62,60 @@
     });
   }
 
+  function animateCartCount() {
+    $$('.cart-count').forEach(el => {
+      let previous = el.textContent;
+      const observer = new MutationObserver(() => {
+        const next = el.textContent;
+        if (next === previous || reducedMotion.matches) return;
+        previous = next;
+        el.classList.remove('horizon-grow');
+        void el.offsetWidth;
+        el.classList.add('horizon-grow');
+        el.addEventListener('animationend', () => el.classList.remove('horizon-grow'), { once: true });
+      });
+      observer.observe(el, { childList: true, characterData: true, subtree: true });
+    });
+  }
+
+  function replaySearchResults() {
+    const root = $('#searchResults');
+    if (!root) return;
+    const observer = new MutationObserver(() => {
+      if (reducedMotion.matches || !$('#searchPanel')?.classList.contains('open')) return;
+      [...root.children].forEach((child, index) => {
+        child.style.animation = 'none';
+        void child.offsetWidth;
+        child.style.animation = '';
+        child.style.animationDelay = `${Math.min(index, 7) * 0.03}s`;
+      });
+    });
+    observer.observe(root, { childList: true });
+  }
+
+  function setPressedMotion() {
+    document.addEventListener('pointerdown', event => {
+      const el = event.target.closest('.icon-btn,.drawer-close,.zoom-close,.email-pill button');
+      if (!el || reducedMotion.matches) return;
+      el.dataset.horizonPressed = 'true';
+    });
+    const clear = event => {
+      const el = event.target?.closest?.('[data-horizon-pressed]');
+      if (el) delete el.dataset.horizonPressed;
+    };
+    document.addEventListener('pointerup', clear);
+    document.addEventListener('pointercancel', clear);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.dataset.themeStandard = 'shopify-horizon';
     document.documentElement.dataset.themeSource = 'nova10-final';
+    document.documentElement.dataset.horizonMotion = 'restored';
 
     pairs.forEach(setDialogSemantics);
+    animateCartCount();
+    replaySearchResults();
+    setPressedMotion();
 
     $$('.cart-count').forEach(el => {
       el.setAttribute('aria-live', 'polite');
