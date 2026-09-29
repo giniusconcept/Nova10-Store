@@ -1,0 +1,77 @@
+name: MT5 Demo UI Probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mt5-demo-ui-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MT5 and UI tools
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          Invoke-WebRequest -Uri 'https://download.terminal.free/cdn/web/metaquotes.ltd/mt5/mt5setup.exe' -OutFile "$env:RUNNER_TEMP\mt5setup.exe"
+          Start-Process "$env:RUNNER_TEMP\mt5setup.exe" -ArgumentList '/auto','/path:"C:\MT5"' -Wait
+          Start-Sleep -Seconds 5
+          $terminal=Get-ChildItem 'C:\MT5','C:\Program Files\MetaTrader 5' -Filter terminal64.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+          if(-not $terminal){throw 'terminal64.exe not found'}
+          "TERMINAL=$terminal" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          python -m pip install --upgrade pip
+          python -m pip install pywinauto pillow pyautogui
+
+      - name: Launch MT5 and inspect UI
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Continue'
+          $p=Start-Process $env:TERMINAL -ArgumentList '/portable' -PassThru
+          Start-Sleep -Seconds 25
+          @'
+          import os,time,traceback
+          from pywinauto import Desktop
+          from PIL import ImageGrab
+          out=os.environ['RUNNER_TEMP']
+          lines=[]
+          try:
+              wins=Desktop(backend='uia').windows()
+              for i,w in enumerate(wins):
+                  try:
+                      title=w.window_text()
+                      if title:
+                          lines.append(f'WINDOW {i}: {title!r} class={w.element_info.class_name!r}')
+                          if any(k in title.lower() for k in ['meta','account','open','trade']):
+                              try:
+                                  lines.append(w.print_control_identifiers(depth=6,filename=None) or '')
+                              except Exception as e:
+                                  lines.append('controls_error='+repr(e))
+                  except Exception as e:
+                      lines.append('window_error='+repr(e))
+          except Exception:
+              lines.append(traceback.format_exc())
+          try:
+              img=ImageGrab.grab()
+              img.save(os.path.join(out,'mt5-ui.png'))
+          except Exception:
+              lines.append('screenshot_error='+traceback.format_exc())
+          open(os.path.join(out,'mt5-ui.txt'),'w',encoding='utf-8').write('\n'.join(lines))
+          print('\n'.join(lines))
+          '@ | Set-Content "$env:RUNNER_TEMP\inspect.py" -Encoding utf8
+          python "$env:RUNNER_TEMP\inspect.py"
+          if(-not $p.HasExited){Stop-Process -Id $p.Id -Force}
+
+      - name: Upload UI probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mt5-demo-ui-probe
+          path: |
+            ${{ runner.temp }}\mt5-ui.txt
+            ${{ runner.temp }}\mt5-ui.png
+          if-no-files-found: warn
