@@ -48,7 +48,7 @@ jobs:
                           lines.append(f'WINDOW {i}: {title!r} class={w.element_info.class_name!r}')
                           if any(k in title.lower() for k in ['meta','account','open','trade']):
                               try:
-                                  lines.append(w.print_control_identifiers(depth=6,filename=None) or '')
+                                  lines.append(str(w.print_control_identifiers(depth=6,filename=None) or ''))
                               except Exception as e:
                                   lines.append('controls_error='+repr(e))
                   except Exception as e:
@@ -62,8 +62,8 @@ jobs:
               lines.append('screenshot_error='+traceback.format_exc())
           open(os.path.join(out,'mt5-ui.txt'),'w',encoding='utf-8').write('\n'.join(lines))
           print('\n'.join(lines))
-          '@ | Set-Content "$env:RUNNER_TEMP\inspect.py" -Encoding utf8
-          python "$env:RUNNER_TEMP\inspect.py"
+          '@ | Set-Content "$env:RUNNER_TEMP\mt5_ui_probe.py" -Encoding utf8
+          python "$env:RUNNER_TEMP\mt5_ui_probe.py"
           if(-not $p.HasExited){Stop-Process -Id $p.Id -Force}
 
       - name: Upload UI probe
