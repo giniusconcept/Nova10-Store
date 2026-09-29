@@ -1,0 +1,70 @@
+name: MT5 Symbol Probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mt5-symbol-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download and install MT5
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $url='https://download.terminal.free/cdn/web/metaquotes.ltd/mt5/mt5setup.exe'
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\mt5setup.exe"
+          $p=Start-Process "$env:RUNNER_TEMP\mt5setup.exe" -ArgumentList '/auto','/path:"C:\MT5"' -PassThru -Wait
+          Start-Sleep -Seconds 5
+          $terminal=Get-ChildItem 'C:\MT5','C:\Program Files\MetaTrader 5' -Filter terminal64.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+          if(-not $terminal){throw 'terminal64.exe not found'}
+          "TERMINAL=$terminal" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          Write-Host "Terminal=$terminal"
+
+      - name: Warm terminal
+        shell: pwsh
+        run: |
+          $p=Start-Process $env:TERMINAL -ArgumentList '/portable' -PassThru
+          Start-Sleep -Seconds 60
+          if(-not $p.HasExited){Stop-Process -Id $p.Id -Force}
+
+      - name: Install Python MT5 package and list symbols
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install MetaTrader5
+          @'
+          import MetaTrader5 as mt5
+          import os, json
+          path=os.environ['TERMINAL']
+          ok=mt5.initialize(path=path, portable=True)
+          print('initialize',ok,'error',mt5.last_error())
+          rows=[]
+          if ok:
+              syms=mt5.symbols_get() or []
+              for s in syms:
+                  name=s.name
+                  u=name.upper()
+                  if any(k in u for k in ['US30','DJI','DOW','WS30','DJ30','USA30']):
+                      rows.append({'name':name,'description':s.description,'path':s.path})
+              print('matches',rows)
+              print('total_symbols',len(syms))
+              mt5.shutdown()
+          with open(os.path.join(os.environ['RUNNER_TEMP'],'mt5-symbols.json'),'w',encoding='utf-8') as f:
+              json.dump(rows,f,indent=2)
+          '@ | Set-Content "$env:RUNNER_TEMP\probe.py" -Encoding utf8
+          python "$env:RUNNER_TEMP\probe.py"
+
+      - name: Upload probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mt5-symbol-probe
+          path: ${{ runner.temp }}\mt5-symbols.json
+          if-no-files-found: warn
