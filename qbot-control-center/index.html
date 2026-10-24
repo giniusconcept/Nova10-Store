@@ -192,6 +192,39 @@ function migrateP4Genesis(d){
  d.publicRevision=Math.max(7,Number(d.publicRevision)||0);
  return d;
 }
+
+function migratePortfolioKickoff(d){
+  if((Number(d.publicRevision)||0)>=8)return d;
+  const active=new Set(['T02','T26','T38','T39','T40','T41','T13','T14','T16','T17','T18','T19','T20','T21','T22','T24','T29','T43','T44','T45']);
+  const blocked=new Set(['T23','T30']);
+  for(const t of d.tasks){
+    if(active.has(t.id)&&t.status==='todo')t.status='doing';
+    if(blocked.has(t.id)&&t.status==='todo')t.status='blocked';
+    if(t.id==='T28'&&t.status==='todo')t.status='done';
+    if(['T38','T39','T40','T41'].includes(t.id)&&String(t.note||'').startsWith('EN ATTENTE — NE PAS DÉMARRER.')){
+      t.note='RECHERCHE DÉMARRÉE le 24/10/2026 : inventaire des références brokers et auditeur de ticks hors ligne en PR #27. Aucun ordre, connexion, extraction ni win rate à 99 % prouvé.';
+    }
+  }
+  const next={
+    P0:'Audit CI et fiabilité dashboard : issue #23',
+    P1:'Recovery Shift V5 Futures et bridge Lucid en recherche : PR #17, #22',
+    P2:'Études natives Vantage, IC, Tag et FundedNext : PR #27',
+    P3:'Analyse des sources de ticks NQ/YM sur 20 ans : PR #27',
+    P4:'Genesis Ledger et simulations de payouts : issue #24',
+    P5:'Simulation du risque de ruine 1K→100K : issue #25',
+    P6:'Diagnostics RS H1–H8 et validation OOS : issue #26'
+  };
+  for(const p of d.projects){
+    if(p.status!=='done')p.status='en_cours';
+    p.next=next[p.id]||p.next;
+  }
+  d.notes=d.notes||[];
+  if(!d.notes.some(n=>String(n.text||'').includes('P0–P6 : recherche démarrée')))
+    d.notes.unshift({at:'2026-10-24',text:'P0–P6 : recherche démarrée. PR #27 et issues #23–#26 ; aucune opération live ni achat.'});
+  d.publicRevision=8;
+  return d;
+}
+
 function migrateP6(d){if(!d.projects.some(p=>p.id==='P6'))d.projects.push(clone(SEED.projects.find(p=>p.id==='P6')));for(const t of SEED.tasks.filter(t=>t.project==='P6'))if(!d.tasks.some(x=>x.id===t.id))d.tasks.push(clone(t));if((d.publicRevision||0)<4){const t=d.tasks.find(x=>x.id==='T31');if(t&&t.status==='blocked'&&String(t.title).includes('P6-04')){t.status='doing';t.note='GitHub P6 activé : extraction de ticks FTMO historiques 2023–2025 pour M1 Bid/Ask, puis minage H1–H8 planifié le mardi à 04:17 UTC. Le premier bootstrap peut encore être en cours. Aucun spécialiste confirmé sans exécution vérifiée.';}const p=d.projects.find(x=>x.id==='P6');if(p&&p.status==='recherche'){p.status='en_cours';p.next='Contrôler le bootstrap des ticks FTMO et les premiers rapports H1–H8 du minage programmé';}d.publicRevision=4;}return d;}
 // Keep programme IDs P0-P6 independent from human-readable priority labels.
 const PRIORITY_OPTIONS=['CRITIQUE','HAUTE','NORMALE'];
@@ -212,7 +245,7 @@ function migrateNomenclature(d){
   }
   return d;
 }
-state=migrateNomenclature(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state))))));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
+state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
 let current='home',focused='P1',filter='all',taskFilter='all',query='',toastTimer;
 const pages=[['home','Vue 360°','home'],['programs','Programmes','programs'],['strategies','Bots & stratégies','strategies'],['capital','Capital / Genesis','capital'],['tasks','Tâches & backlog','tasks'],['journal','Journal & gouvernance','journal']];
 function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
