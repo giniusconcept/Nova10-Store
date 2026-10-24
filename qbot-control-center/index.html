@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#070d1a">
-<title>Q BOT — Control Center | P0–P6</title>
+<title>Q BOT — Control Center | P0–P7</title>
 <meta name="description" content="Q BOT Control Center — dashboard de pilotage des programmes de recherche en trading algorithmique. Version partageable de démonstration.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -73,9 +73,9 @@ button.kpi-link .k-label::after{content:"›";margin-left:auto;font-size:18px;co
 <header class="topbar"><div style="display:flex;align-items:center;gap:10px"><button class="iconbutton mobilebtn" id="menu-toggle" aria-label="Ouvrir le menu">☰</button><div class="breadcrumb"><span>AGENT IA</span><span> / </span><strong id="breadcrumb-title">VUE 360°</strong></div></div><div class="header-actions"><span id="paris-clock" class="clock"></span><span class="statusbar"><span class="live-dot"></span>DÉMO LOCALE</span><button class="btn primary" id="share-app-btn" title="Partager le site ou le fichier">↗ Partager</button><button class="btn ghost" id="export-btn">⇩ Exporter</button><button class="btn primary" id="quick-add-btn">＋ Action</button></div></header>
 <div id="view-root">
   <section class="panel" id="qbot-startup-fallback" style="margin-top:8px;border-color:#34718f;background:linear-gradient(135deg,#0e263f,#0d1728)">
-    <div class="eyebrow" style="color:#74cdfa">Q BOT · CONTROL CENTER · P0–P6</div>
+    <div class="eyebrow" style="color:#74cdfa">Q BOT · CONTROL CENTER · P0–P7</div>
     <h1 style="margin:12px 0;font-size:clamp(22px,5vw,32px);line-height:1.15">Centre de commande des programmes IA</h1>
-    <p style="color:#a9c4e0">Sept programmes disponibles. Affichage de secours actif : le tableau interactif devrait remplacer automatiquement cette page au chargement.</p>
+    <p style="color:#a9c4e0">Huit programmes disponibles. Affichage de secours actif : le tableau interactif devrait remplacer automatiquement cette page au chargement.</p>
     <div style="display:grid;gap:10px;margin-top:20px">
       <div class="field"><strong>P0 — Q BOT CORE</strong><div class="muted small">Supervision GitHub et missions</div></div>
       <div class="field"><strong>P1 — FUTURES ENGINE</strong><div class="muted small">One Shot Weekly · Pine Script v6</div></div>
@@ -87,6 +87,11 @@ button.kpi-link .k-label::after{content:"›";margin-left:auto;font-size:18px;co
         <strong style="color:#7fe9fa">P6 — RECOVERY SHIFT SPECIALIST MINING</strong>
         <div class="muted small" style="margin-top:5px">Minage Python de spécialistes · NASDAQ / Dow · validation OOS</div>
         <a href="https://github.com/giniusconcept/QuantLab-Mobile/pull/11" style="display:inline-block;margin-top:9px">Voir la PR #11 en attente d'intégration →</a>
+      </div>
+      <div class="field" style="border:1px solid #2b748b;border-radius:12px;padding:14px;background:#123047">
+        <strong style="color:#7fe9fa">P7 — Q BOT GIF FACTORY</strong>
+        <div class="muted small" style="margin-top:5px">10 GIFs différents / heure · 20 scènes · design original</div>
+        <a href="https://github.com/giniusconcept/QuantLab-Mobile/issues/30" style="display:inline-block;margin-top:9px">Voir l'action P7-01 sur GitHub →</a>
       </div>
     </div>
     <p style="font-size:11px;color:#a4b6ca;margin-top:18px">Si ce résumé reste visible, le tableau JavaScript n'a pas démarré ; les programmes demeurent consultables ici. Aucun trading live depuis ce site.</p>
@@ -111,6 +116,7 @@ const SEED={version:1,created:'2026-10-24',projects:[
 {id:'P4',name:'100K GENESIS',short:'Capital propre + payouts',desc:'Construire un système de capitalisation progressivement indépendant des prop firms.',status:'en_cours',owner:'Q BOT Genesis',priority:'HAUTE',next:'Genesis Ledger EUR et simulations de flux propres, après vérification des comptes et paiements réels',risk:'Risque de levier, corrélation et dépendance aux contreparties',stack:['FundedNext','Tag Markets','Vantage','IC Markets']},
 {id:'P5',name:'1K → 100K · CAPITAL CHALLENGE',short:'1 000 $ → 100 000 $ · fonds propres',desc:'Programme autonome de croissance d’un compte personnel de 1 000 $ vers un objectif de 100 000 $ (×100), distinct du financement par prop firms.',status:'cadrage',owner:'Q BOT Capital Lab',priority:'HAUTE',next:'Geler la stratégie de référence, établir le protocole de risque et valider un backtest net sur le broker retenu',risk:'Objectif ×100 extrêmement ambitieux ; risque élevé de perte totale, effet de levier, frais et performances non reproductibles',stack:['Capital propre','Broker autorisé','OSW / spécialistes certifiés','Simulation de risque']},
 {id:'P6',name:'Recovery Shift Specialist Mining',short:'NASDAQ · Dow · Spécialistes RS V6',desc:'Recherche et qualification de nouveaux micro-spécialistes Recovery Shift avec les laboratoires Python existants, à partir de ticks dont la provenance est vérifiée.',status:'recherche',owner:'Q BOT Specialist Mining',priority:'HAUTE',next:'Auditer les jeux de données réellement disponibles puis lancer un pilote de minage borné',risk:'Surapprentissage, biais de sélection 2026, données expirées ou non certifiées ; aucun résultat OOS revendiqué',stack:['Python','RS V6 Multi-TF','Ticks Bid/Ask','Walk-forward','OOS']},
+{id:'P7',name:'Q BOT GIF FACTORY',short:'10 GIFs Q BOT / heure',desc:'Bibliothèque d’animations Q BOT : 10 nouvelles boucles thématiques par heure, référence originale, catalogue et archives GitHub Actions.',status:'en_cours',owner:'Q BOT GIF Creator',priority:'HAUTE',next:'Vérifier la répétition horaire du workflow P7-01 et les archives de chaque lot',risk:'GitHub Actions best effort, archives limitées à 30 jours, mouvements procéduraux sans nouvelles poses IA',stack:['GitHub Actions','Python','Pillow','GIF','Catalogue SHA-256']},
 ],tasks:[
 {id:'T01',project:'P0',title:'Inventaire initial des dépôts QuantLab-Mobile et NDX-III',status:'done',priority:'HAUTE',owner:'Q BOT',note:'Arborescence GitHub inspectée le 24 octobre ; inventaire fonctionnel approfondi encore requis.'},
 {id:'T02',project:'P0',title:'Définir les événements et le registre de certification',status:'todo',priority:'HAUTE',owner:'Q BOT',note:'Schémas signal/order/backtest, versionnement et empreintes SHA-256.'},
@@ -156,7 +162,8 @@ const SEED={version:1,created:'2026-10-24',projects:[
 ,{"id":"T43","project":"P4","title":"P4-05 — Construire Genesis Ledger : payouts nets et coffre EUR","status":"todo","priority":"CRITIQUE","owner":"Q BOT Genesis","note":"Suivre exclusivement l'argent encaissé et réellement détenu, distinguer 100K EUR de fonds propres du nominal prop et Tag ×12; change réel, provisions fiscales, coûts challenges, source et date."}
 ,{"id":"T44","project":"P4","title":"P4-06 — Simuler waterfall 70/10/10/10 et stress 12–24 mois","status":"todo","priority":"HAUTE","owner":"Q BOT Quant","note":"Paliers coffre <10K : 70% coffre/10% Tag/10% challenges/10% réserve ; 10–50K : 60/15/15/10 ; 50–100K : 80/5/5/10. Backtest de cashflows, Monte Carlo et pertes corrélées ; aucun payout présumé."}
 ,{"id":"T45","project":"P4","title":"P4-07 — Valider mapping bot × firm et limites de pertes agrégées","status":"todo","priority":"CRITIQUE","owner":"Q BOT Risk","note":"Recovery Shift V3/V5/V6 et One Shot ×4 : preuve par version et broker. Vérifier conditions EA, VPS et copy trading (notamment FundedNext ≥50K), corrélation US30/NASDAQ et DD restant avant chaque allocation."}
-,{"id":"T46","project":"P4","title":"P4-08 — Tester petit retrait Tag avant scaling et réinvestissement prop","status":"blocked","priority":"HAUTE","owner":"Q BOT Genesis","note":"Pilotage humain seulement après vérification juridique/contractuelle et test de retrait effectif; Tag ×12 = allocation notionnelle, non fonds propres. Aucun dépôt, achat challenge ni ordre initié depuis le dashboard."}],strategies:[
+,{"id":"T46","project":"P4","title":"P4-08 — Tester petit retrait Tag avant scaling et réinvestissement prop","status":"blocked","priority":"HAUTE","owner":"Q BOT Genesis","note":"Pilotage humain seulement après vérification juridique/contractuelle et test de retrait effectif; Tag ×12 = allocation notionnelle, non fonds propres. Aucun dépôt, achat challenge ni ordre initié depuis le dashboard."},{"id":"T47","project":"P7","ref":"P7-01","title":"P7-01 — Générer 10 GIFs Q BOT différents par heure","status":"doing","priority":"HAUTE","owner":"Q BOT GIF Creator","note":"Workflow GitHub Actions horaire installé et testé avec succès le 24 octobre 2026 à 21:00 (Paris). Dix GIFs de thèmes distincts produits et archives Actions vérifiées ; exécution périodique best effort, sans modèle génératif de nouvelles poses. Voir https://github.com/giniusconcept/QuantLab-Mobile/actions/workflows/qbot-p7-gif-factory.yml"}
+],strategies:[
 {name:'ONE SHOT WEEKLY ×4',area:'US30 / Dow',status:'reference',proof:'Référence de backtest non incluse dans la démonstration',next:'Baseline OSW 1TPD, portage P1',project:'P1',confidence:'Déclarée'},
 {name:'RECOVERY SHIFT V3',area:'MT5 / Dow',status:'operational',proof:'Historique réel non inclus dans la démonstration',next:'Parité Futures des sorties anticipées',project:'P1',confidence:'Opérationnel déclaré'},
 {name:'RECOVERY SHIFT V5',area:'MT5 / Dow',status:'testing',proof:'Amélioration de V3 ; phase non attribuée à V5',next:'Geler signatures et exigences OOS',project:'P1',confidence:'En recherche'},
@@ -226,7 +233,8 @@ function migratePortfolioKickoff(d){
 }
 
 function migrateP6(d){if(!d.projects.some(p=>p.id==='P6'))d.projects.push(clone(SEED.projects.find(p=>p.id==='P6')));for(const t of SEED.tasks.filter(t=>t.project==='P6'))if(!d.tasks.some(x=>x.id===t.id))d.tasks.push(clone(t));if((d.publicRevision||0)<4){const t=d.tasks.find(x=>x.id==='T31');if(t&&t.status==='blocked'&&String(t.title).includes('P6-04')){t.status='doing';t.note='GitHub P6 activé : extraction de ticks FTMO historiques 2023–2025 pour M1 Bid/Ask, puis minage H1–H8 planifié le mardi à 04:17 UTC. Le premier bootstrap peut encore être en cours. Aucun spécialiste confirmé sans exécution vérifiée.';}const p=d.projects.find(x=>x.id==='P6');if(p&&p.status==='recherche'){p.status='en_cours';p.next='Contrôler le bootstrap des ticks FTMO et les premiers rapports H1–H8 du minage programmé';}d.publicRevision=4;}return d;}
-// Keep programme IDs P0-P6 independent from human-readable priority labels.
+function migrateP7(d){if(!d.projects.some(p=>p.id==='P7'))d.projects.push(clone(SEED.projects.find(p=>p.id==='P7')));for(const t of SEED.tasks.filter(t=>t.project==='P7'))if(!d.tasks.some(x=>x.id===t.id))d.tasks.push(clone(t));return d;}
+// Keep programme IDs P0-P7 independent from human-readable priority labels.
 const PRIORITY_OPTIONS=['CRITIQUE','HAUTE','NORMALE'];
 function normalizePriority(value){return ({P1:'HAUTE',P2:'NORMALE',P3:'NORMALE',critical:'CRITIQUE',high:'HAUTE',normal:'NORMALE'})[value]||(PRIORITY_OPTIONS.includes(value)?value:'NORMALE')}
 function priorityBadge(value){const label=normalizePriority(value);return '<span class="priority-tag '+label.toLowerCase()+'">'+esc(label)+'</span>'}
@@ -245,6 +253,7 @@ function migrateNomenclature(d){
   }
   return d;
 }
+state=migrateP7(state);
 state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
 let current='home',focused='P1',filter='all',taskFilter='all',query='',toastTimer;
 const pages=[['home','Vue 360°','home'],['programs','Programmes','programs'],['strategies','Bots & stratégies','strategies'],['capital','Capital / Genesis','capital'],['tasks','Tâches & backlog','tasks'],['journal','Journal & gouvernance','journal']];
