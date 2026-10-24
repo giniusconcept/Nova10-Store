@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-10-24T10:09:45+00:00",
+  "mode": "RESEARCH_ONLY",
+  "supervisor": "research audits on hourly best-effort schedule",
+  "programs": [
+    {
+      "id": "P0",
+      "total": 2,
+      "completed": 2,
+      "blocked": 0,
+      "awaiting_human": 0
+    },
+    {
+      "id": "P1",
+      "total": 2,
+      "completed": 1,
+      "blocked": 0,
+      "awaiting_human": 1
+    },
+    {
+      "id": "P2",
+      "total": 1,
+      "completed": 1,
+      "blocked": 0,
+      "awaiting_human": 0
+    },
+    {
+      "id": "P3",
+      "total": 1,
+      "completed": 1,
+      "blocked": 0,
+      "awaiting_human": 0
+    },
+    {
+      "id": "P4",
+      "total": 1,
+      "completed": 0,
+      "blocked": 0,
+      "awaiting_human": 1
+    },
+    {
+      "id": "P5",
+      "total": 1,
+      "completed": 0,
+      "blocked": 0,
+      "awaiting_human": 1
+    }
+  ],
+  "checks": {
+    "osw_static_passed": true,
+    "workflow_health_available": true
+  },
+  "safety": {
+    "ai_coding": false,
+    "trading_live": false,
+    "production_ea_changes": false
+  },
+  "note": "Public aggregate only; private tasks, source paths, accounts and reports are not shared."
+}
