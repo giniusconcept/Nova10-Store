@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-24T21:59:53+00:00",
+  "updated_at_utc": "2026-10-24T23:07:13+00:00",
   "mode": "RESEARCH_ONLY",
   "supervisor": "research audits on hourly best-effort schedule",
   "programs": [
@@ -13,10 +13,10 @@
     },
     {
       "id": "P1",
-      "total": 3,
+      "total": 8,
       "completed": 1,
       "blocked": 0,
-      "awaiting_human": 2
+      "awaiting_human": 7
     },
     {
       "id": "P2",
