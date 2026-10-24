@@ -58,6 +58,7 @@ button.kpi-link .k-label::after{content:"›";margin-left:auto;font-size:18px;co
 @media(max-width:740px){.sidebar{position:fixed;left:-270px;top:0;width:250px;transition:left .2s;box-shadow:30px 0 50px #0008}.sidebar.open{left:0}.sidebar-backdrop{display:none;position:fixed;inset:0;z-index:25;background:#0009}.sidebar-backdrop.show{display:block}.main{padding:14px 14px 104px}.mobilebtn{display:grid}.clock{display:none}.topbar{margin-bottom:16px}.topbar .btn.ghost{display:none}.statusbar{font-size:10px;padding:6px 9px}.breadcrumb{font-size:10px}.hero{padding:20px;gap:18px}.hero-right{padding:14px}.headline-sub{font-size:12px}.hero-actions{margin-top:16px}.hero h1{font-size:28px}.kpi-grid{gap:9px}.kpi{padding:13px;min-height:109px}.kpi .k-value{font-size:28px}.kpi .k-label{font-size:10px}.kpi .k-detail{font-size:10px}.panel{padding:15px}.panel-header h2{font-size:16px}.program-grid,.subgrid,.detail-grid{grid-template-columns:1fr}.project-card p{min-height:0}.flow-map{grid-template-columns:1fr;gap:6px}.flowarrow{transform:rotate(90deg);height:25px;line-height:20px}.flowbox{min-height:65px}.program-row{grid-template-columns:36px minmax(0,1fr) auto;gap:8px;padding:10px}.program-icon{width:36px;height:36px}.prog-title{font-size:12px}.prog-desc{font-size:10px}.program-right .pill{font-size:9px}.program-right .arrow{display:none}.alloc-row{grid-template-columns:1fr 65px 70px}.alloc-row label{font-size:11px}.section-head{align-items:start}.section-head h1{font-size:28px}.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;justify-content:space-around;align-items:center;background:#0b182cf5;border-top:1px solid #2d4c6d;padding:10px 6px max(10px,env(safe-area-inset-bottom));backdrop-filter:blur(15px)}.bottom-nav button{border:0;background:transparent;color:#8eaccb;display:grid;justify-items:center;gap:2px;font-size:10px;min-width:58px;font-weight:750;padding:3px}.bottom-nav button.active{color:#61c7ff}.bottom-nav svg{width:20px;height:20px}.task-item{grid-template-columns:1fr}.task-item .actions{justify-content:flex-end}.toast{bottom:90px;right:13px;left:13px;text-align:center}.header-actions{gap:6px}}
 @media print{.sidebar,.bottom-nav,.topbar .header-actions,.hero-actions,.btn,.task-item .actions{display:none!important}.main{padding:0;max-width:none}.panel,.kpi,.hero{box-shadow:none;break-inside:avoid}.shell{display:block}.hero{grid-template-columns:1fr 1fr}}
 @media(max-width:740px){#share-app-btn{padding:8px 11px}.topbar .clock{display:none}.topbar .header-actions{gap:5px}}
+.main{margin:0 auto}
 </style>
 </head>
 <body>
@@ -70,7 +71,27 @@ button.kpi-link .k-label::after{content:"›";margin-left:auto;font-size:18px;co
 <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
 <main class="main">
 <header class="topbar"><div style="display:flex;align-items:center;gap:10px"><button class="iconbutton mobilebtn" id="menu-toggle" aria-label="Ouvrir le menu">☰</button><div class="breadcrumb"><span>AGENT IA</span><span> / </span><strong id="breadcrumb-title">VUE 360°</strong></div></div><div class="header-actions"><span id="paris-clock" class="clock"></span><span class="statusbar"><span class="live-dot"></span>DÉMO LOCALE</span><button class="btn primary" id="share-app-btn" title="Partager le site ou le fichier">↗ Partager</button><button class="btn ghost" id="export-btn">⇩ Exporter</button><button class="btn primary" id="quick-add-btn">＋ Action</button></div></header>
-<div id="view-root"></div>
+<div id="view-root">
+  <section class="panel" id="qbot-startup-fallback" style="margin-top:8px;border-color:#34718f;background:linear-gradient(135deg,#0e263f,#0d1728)">
+    <div class="eyebrow" style="color:#74cdfa">Q BOT · CONTROL CENTER · P0–P6</div>
+    <h1 style="margin:12px 0;font-size:clamp(22px,5vw,32px);line-height:1.15">Centre de commande des programmes IA</h1>
+    <p style="color:#a9c4e0">Sept programmes disponibles. Affichage de secours actif : le tableau interactif devrait remplacer automatiquement cette page au chargement.</p>
+    <div style="display:grid;gap:10px;margin-top:20px">
+      <div class="field"><strong>P0 — Q BOT CORE</strong><div class="muted small">Supervision GitHub et missions</div></div>
+      <div class="field"><strong>P1 — FUTURES ENGINE</strong><div class="muted small">One Shot Weekly · Pine Script v6</div></div>
+      <div class="field"><strong>P2 — ONE SHOT MULTI-BROKER</strong><div class="muted small">FTMO · Vantage · IC Markets · Tag Markets</div></div>
+      <div class="field"><strong>P3 — 20+ YEARS TICK MINING</strong><div class="muted small">Acquisition et audit de données</div></div>
+      <div class="field"><strong>P4 — 100K GENESIS</strong><div class="muted small">Capital, payouts et simulation</div></div>
+      <div class="field"><strong>P5 — 1K TO 100K CAPITAL CHALLENGE</strong><div class="muted small">Études de risque et simulations</div></div>
+      <div class="field" style="border:1px solid #2b748b;border-radius:12px;padding:14px;background:#123047">
+        <strong style="color:#7fe9fa">P6 — RECOVERY SHIFT SPECIALIST MINING</strong>
+        <div class="muted small" style="margin-top:5px">Minage Python de spécialistes · NASDAQ / Dow · validation OOS</div>
+        <a href="https://github.com/giniusconcept/QuantLab-Mobile/pull/11" style="display:inline-block;margin-top:9px">Voir la PR #11 en attente d'intégration →</a>
+      </div>
+    </div>
+    <p style="font-size:11px;color:#a4b6ca;margin-top:18px">Si ce résumé reste visible, le tableau JavaScript n'a pas démarré ; les programmes demeurent consultables ici. Aucun trading live depuis ce site.</p>
+  </section>
+</div>
 </main>
 </div>
 <nav id="bottom-nav" class="bottom-nav" aria-label="Navigation mobile"></nav>
