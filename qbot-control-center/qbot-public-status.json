@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-24T13:22:19+00:00",
+  "updated_at_utc": "2026-10-24T13:54:05+00:00",
   "mode": "RESEARCH_ONLY",
   "supervisor": "research audits on hourly best-effort schedule",
   "programs": [
@@ -45,6 +45,13 @@
       "completed": 0,
       "blocked": 0,
       "awaiting_human": 1
+    },
+    {
+      "id": "P6",
+      "total": 4,
+      "completed": 1,
+      "blocked": 0,
+      "awaiting_human": 3
     }
   ],
   "checks": {
