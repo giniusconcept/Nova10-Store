@@ -345,6 +345,17 @@ function migrateAccountPrograms(d){
     d.notes=d.notes||[];d.notes.unshift({key:'p16-one-shift-created',at:'29/10/2026 · 08:40 Paris',text:'Création P16 — ONE SHIFT : association des signaux OSW ×4 et Recovery Shift V5, moteurs actifs en parallèle, huit actions de recherche jusqu’au MQ5 exact + PDF natif et comparatif fréquence/risque. Quotas OSW conservés par moteur. Aucun code fusionné ni nouveau BT exécuté ; aucune nouvelle automatisation créée.'});
     d.oneShiftProgramVersion=1;
   }
+  // Reconcile program and task definitions on every load, retaining local progress.
+  for(const source of ACCOUNT_PROGRAMS){
+    const target=d.projects.find(p=>p.id===source.id);
+    if(target)for(const key of ['name','short','desc','stack','inputs','deliverables'])
+      if(source[key]!==undefined)target[key]=clone(source[key]);
+  }
+  for(const source of ACCOUNT_TASKS){
+    const target=d.tasks.find(t=>t.id===source.id||t.ref===source.ref);
+    if(target)for(const key of ['ref','project','title'])target[key]=source[key];
+  }
+  d.commandCenterBuild='P16-R2';
   d.accountProgramsVersion=3;
   return migrateAccountKickoff(d);
 }
@@ -398,7 +409,8 @@ function renderP5Tracker(){
 }
 
 function renderHome(){const tasks=state.tasks;const blocked=tasks.filter(x=>x.status==='blocked');const done=tasks.filter(x=>x.status==='done').length;const inProgress=tasks.filter(x=>x.status==='doing');const queue=tasks.filter(x=>x.status!=='done').sort((a,b)=>{const rank={CRITIQUE:0,HAUTE:1,NORMALE:2};return (rank[a.priority]??3)-(rank[b.priority]??3)||({doing:0,blocked:1,todo:2}[a.status]-{doing:0,blocked:1,todo:2}[b.status])}).slice(0,5);return `
-<section class="hero"><div><div class="eyebrow">◉ Q BOT / Command Center — actualisé le 29/10/2026 · 08:40 Paris</div><h1>Une vision à <em>360°</em><br>de tout ton écosystème.</h1><p class="mainphrase">Programmes P8 à P16 : classements, E8, FundedNext, FTMO, GOAT, Shadow Pulse, Quantum Link et ONE SHIFT. Actions, preuves, blocages et fichiers d’entrée réunis dans le tableau.</p><div class="hero-actions"><button class="btn primary" data-nav="programs">Explorer les programmes ${icon('arrow')}</button><button class="btn" data-nav="tasks">Ouvrir le backlog</button></div></div><div class="hero-right"><div><div class="mission-label">DERNIER PROGRAMME AJOUTÉ · P16</div><h3>ONE SHIFT</h3><p class="small">One Shot Weekly ×4 + Recovery Shift V5 : deux moteurs en parallèle pour rechercher davantage d’occasions, avec risque cumulé contrôlé.</p><button class="btn primary" data-project="P16">Ouvrir P16 et ses 8 actions →</button></div><div><div class="hr-line"></div><div class="mission-meta">${pill('cadrage','P16 · programme créé')}${pill('todo','8 actions enregistrées')}</div><p class="tiny muted">Sources exactes à rattacher ; développement et BT natif à réaliser.</p></div></div></section>
+<section class="hero"><div><div class="eyebrow">◉ Q BOT / Command Center — actualisé le 29/10/2026 · 08:58 Paris · édition P16-R2</div><h1>Une vision à <em>360°</em><br>de tout ton écosystème.</h1><p class="mainphrase">Programmes P8 à P16 : classements, E8, FundedNext, FTMO, GOAT, Shadow Pulse, Quantum Link et ONE SHIFT. Actions, preuves, blocages et fichiers d’entrée réunis dans le tableau.</p><div class="hero-actions"><button class="btn primary" data-nav="programs">Explorer les programmes ${icon('arrow')}</button><button class="btn" data-nav="tasks">Ouvrir le backlog</button></div></div><div class="hero-right"><div><div class="mission-label">DERNIER PROGRAMME AJOUTÉ · P16</div><h3>ONE SHIFT</h3><p class="small">One Shot Weekly ×4 + Recovery Shift V5 : deux moteurs en parallèle pour rechercher davantage d’occasions, avec risque cumulé contrôlé.</p><button class="btn primary" data-project="P16">Ouvrir P16 et ses 8 actions →</button></div><div><div class="hr-line"></div><div class="mission-meta">${pill('cadrage','P16 · programme créé')}${pill('todo','8 actions enregistrées')}</div><p class="tiny muted">Sources exactes à rattacher ; développement et BT natif à réaliser.</p></div></div></section>
+<section class="panel" style="margin-bottom:16px;border-color:#3bdeb4"><div class="panel-header"><h2>Programmes ajoutés · P13 à P16</h2><span class="pill done">P16-R2 · 29/10/2026</span></div><p class="source">Version incluant les 26 actions GOAT, Shadow Pulse, Quantum Link et ONE SHIFT. Ouvre une fiche pour consulter ses actions et leurs statuts.</p><div class="hero-actions">${['P13','P14','P15','P16'].map(id=>`<button class="btn" data-project="${id}">${id} · ${summary(id).done}/${summary(id).total} terminées →</button>`).join('')}</div></section>
 <div class="kpi-grid">${kpi('PROGRAMMES', (state.projects.length-1)+' <span class="tiny muted">+ core</span>',(state.projects.length-1)+' axes + orchestrateur P0','programs',undefined,'programs')}${kpi('ACTIONS À TRAITER',tasks.length-done,`${inProgress.length} en cours · ${tasks.length} au total`,'tasks','var(--gold)','open')}${kpi('TÂCHES TERMINÉES',done,'Compteur des tâches du dashboard','chart','var(--teal)','done')}${kpi('BLOCAGES',blocked.length,'Bloqueurs à arbitrer','alert',blocked.length?'var(--red)':'var(--teal)','blocked')}</div>
 <section class="panel" style="margin-bottom:16px;border-color:#285a87;background:linear-gradient(130deg,#0e1e36,#101728)">
 <div class="panel-header"><h2>Q BOT CORE · Supervision & architecture</h2><span class="pill doing">Audits horaires activés</span></div>
