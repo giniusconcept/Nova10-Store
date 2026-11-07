@@ -1,0 +1,58 @@
+name: Selfnamed -> NOVA10 mapping
+
+on:
+  push:
+    paths:
+      - 'scripts/selfnamed-map.mjs'
+      - '.github/workflows/selfnamed-map.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  map-selfnamed-product:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SELFNAMED_EMAIL: ${{ secrets.SELFNAMED_EMAIL }}
+      SELFNAMED_PASSWORD: ${{ secrets.SELFNAMED_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Map Selfnamed product to NOVA10
+        id: map
+        shell: bash
+        run: |
+          set +e
+          node scripts/selfnamed-map.mjs
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload audit status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selfnamed-map-audit
+          path: selfnamed-map-status.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce result
+        shell: bash
+        run: |
+          test "${{ steps.map.outputs.exit_code }}" = "0"
