@@ -296,6 +296,22 @@ function migrateOSWActionsStatus20261107(d){
  d.notes.unshift({key,at:'07/11/2026 · Paris',text:'OSW ×4/1TPD FundedNext 100K : adaptation préparée/versionnée, mais workflow GitHub Actions natif en échec sans job exploitable ; aucun BT/rapport validé. FTMO Instant 100K : MQ5 v7.21 livré et contrôles statiques seulement ; MetaEditor et BT natif non exécutés. Deux validations natives restent ouvertes.'});
  d.oswActionsStatusRevision=key;return d;
 }
+function migrateP9DeliveryClosure20261107(d){
+ const key='p9-delivered-closed-20261107';
+ if(d.p9DeliveryClosureRevision===key)return d;
+ const p=d.projects.find(x=>x.id==='P9');
+ if(p){p.status='done';p.next='Clôturé — MQ5 et rapport natif MT5 livrés. Aucune action restante côté Q BOT.';p.desc='Programme P9 E8 500K — MQ5 et rapport de backtest natif MT5 livrés. À la demande utilisateur, toutes les actions Q BOT sont clôturées.';}
+ for(const t of d.tasks.filter(x=>x.project==='P9')){
+   if(['P9-04','P9-05','P9-RSV5'].includes(t.ref)||['ACCOUNT-P9-04','ACCOUNT-P9-05','P9-RSV5-E8-ADAPTATION-20261106'].includes(t.id)){
+     t.status='done';
+     if(t.ref==='P9-04')t.note='Clôturé le 07/11/2026 après confirmation utilisateur : MQ5 et rapport livrés. Aucune action supplémentaire requise côté Q BOT.';
+     if(t.ref==='P9-05')t.note='Livraison confirmée par l’utilisateur : MQ5 et rapport natif MT5 remis. Aucune action supplémentaire requise côté Q BOT.';
+   }
+ }
+ d.notes=d.notes||[];
+ d.notes.unshift({key,at:'07/11/2026 · Paris',text:'P9 clôturé à la demande utilisateur : le MQ5 et le rapport de backtest natif MT5 sont livrés. Aucune action supplémentaire requise côté Q BOT.'});
+ d.p9DeliveryClosureRevision=key;return d;
+}
 function migrateAccountPrograms(d){
   d.tasks=d.tasks.filter(t=>!(t.project==='P11'&&(t.ref==='P11-01'||t.id==='ACCOUNT-P11-01')));
   if((Number(d.accountProgramsVersion)||0)<3){const p=d.projects.find(p=>p.id==='P11');if(p){const baseline=ACCOUNT_PROGRAMS.find(p=>p.id==='P11');p.desc=baseline.desc;p.risk=baseline.risk;if(String(p.next||'').includes('Vérifier réception du payout'))p.next=baseline.next;}}
@@ -469,7 +485,7 @@ function migrateAccountPrograms(d){
     d.notes.unshift({key:'p9-remove-01-02-03',at:'01/11/2026 · Paris',text:'P9-01, P9-02 et P9-03 supprimées à la demande utilisateur. Les données historiques et preuves ne sont pas supprimées. Prochaine action P9-04.'});
     d.p9RemoveFirstThreeVersion=1;
   }
-  return migrateOSWActionsStatus20261107(migrateE8RSV5Status(d));
+  return migrateP9DeliveryClosure20261107(migrateOSWActionsStatus20261107(migrateE8RSV5Status(d)));
 }
 state.projects=state.projects.filter(p=>p.id!=='P7');state.tasks=state.tasks.filter(t=>t.project!=='P7');
 state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));state=migrateNomenclature(migrateAccountPrograms(state));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
