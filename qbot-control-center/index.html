@@ -282,6 +282,20 @@ function migrateE8RSV5Status(d){
   d.e8RSV5StatusRevision=key;return d;
 }
 
+function migrateOSWActionsStatus20261107(d){
+ const key='osw-fundednext-ftmo-20261107';
+ if(d.oswActionsStatusRevision===key)return d;
+ d.projects=d.projects||[];d.tasks=d.tasks||[];d.notes=d.notes||[];
+ const p18={id:'P18',name:'FTMO Instant 100K — One Shot Weekly ×4',short:'OSW ×4 · risque 2K · plafond 4K',desc:'EA OSW ×4/1TPD préparé pour FTMO Instant 100K. Code livré et contrôles statiques effectués ; compilation MetaEditor et backtest natif MT5 Model 4 restent à réaliser.',status:'en_cours',owner:'Q BOT One Shot',priority:'CRITIQUE',next:'Compiler dans MetaEditor, puis lancer le BT natif MT5 Model 4 et auditer le rapport.',risk:'Aucun résultat natif MT5 établi. Protections Instant FTMO (drawdown, actualités et règles spécifiques) à valider avant usage.',stack:['FTMO Instant 100K','OSW ×4 / 1TPD','Risque max 2 000 $/trade','Plafond cycle 4 000 $','MQ5 v7.21'],automation:null,deliverables:['MQ5 versionné','Rapport PDF du BT natif MT5 Model 4']};
+ if(!d.projects.some(x=>x.id==='P18'))d.projects.push(p18);
+ const tasks=[
+ {id:'P10-OSW-FN-20261106',ref:'P10-OSW',project:'P10',title:'OSW ×4/1TPD FundedNext 100K — adapter et valider sur ticks réels',note:'Code adapté et versionné sur qbot/fn-100k-osw-recovery-20261106, commit c64076b04153a24df068090a79bc432d65b21f0c. Workflow natif dédié 42292500424 terminé en failure, sans job exploitable ; les autres runs déclenchés ont également échoué. Aucun BT natif MT5 Model 4 réussi ni rapport validé ; couverture et parité des ticks FundedNext restent à établir.',status:'doing',owner:'Q BOT One Shot',priority:'CRITIQUE'},
+ {id:'P18-01',ref:'P18-01',project:'P18',title:'Compiler et backtester nativement OSW FTMO Instant 100K',note:'Source livrée : OSW_FTMO_100K_CAP4000_RISK2000_v7_21.mq5 (Library file_id libfile_b048500155488191bc8eff482e6e124f). Contrôles statiques du plafonnement effectués ; compilation MetaEditor et BT natif MT5 non exécutés. Aucun résultat de performance établi. Protections du contrat Instant à ajouter/valider avant usage.',status:'doing',owner:'Q BOT One Shot',priority:'CRITIQUE'}
+ ];
+ for(const t of tasks){const old=d.tasks.find(x=>x.id===t.id);if(old)Object.assign(old,t);else d.tasks.push(t);}
+ d.notes.unshift({key,at:'07/11/2026 · Paris',text:'OSW ×4/1TPD FundedNext 100K : adaptation préparée/versionnée, mais workflow GitHub Actions natif en échec sans job exploitable ; aucun BT/rapport validé. FTMO Instant 100K : MQ5 v7.21 livré et contrôles statiques seulement ; MetaEditor et BT natif non exécutés. Deux validations natives restent ouvertes.'});
+ d.oswActionsStatusRevision=key;return d;
+}
 function migrateAccountPrograms(d){
   d.tasks=d.tasks.filter(t=>!(t.project==='P11'&&(t.ref==='P11-01'||t.id==='ACCOUNT-P11-01')));
   if((Number(d.accountProgramsVersion)||0)<3){const p=d.projects.find(p=>p.id==='P11');if(p){const baseline=ACCOUNT_PROGRAMS.find(p=>p.id==='P11');p.desc=baseline.desc;p.risk=baseline.risk;if(String(p.next||'').includes('Vérifier réception du payout'))p.next=baseline.next;}}
@@ -455,7 +469,7 @@ function migrateAccountPrograms(d){
     d.notes.unshift({key:'p9-remove-01-02-03',at:'01/11/2026 · Paris',text:'P9-01, P9-02 et P9-03 supprimées à la demande utilisateur. Les données historiques et preuves ne sont pas supprimées. Prochaine action P9-04.'});
     d.p9RemoveFirstThreeVersion=1;
   }
-  return migrateE8RSV5Status(d);
+  return migrateOSWActionsStatus20261107(migrateE8RSV5Status(d));
 }
 state.projects=state.projects.filter(p=>p.id!=='P7');state.tasks=state.tasks.filter(t=>t.project!=='P7');
 state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));state=migrateNomenclature(migrateAccountPrograms(state));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
