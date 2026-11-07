@@ -33,9 +33,7 @@ try {
   await page.waitForTimeout(5000);
 
   if (/\/login(?:\?|$)/.test(page.url())) {
-    const txt = (await page.locator('body').innerText()).slice(0,2500);
-    out('blocked','selfnamed_login_not_completed',{url:page.url(),pageText:txt});
-    await page.screenshot({path:'selfnamed-login-blocked.png',fullPage:true});
+    out('blocked','selfnamed_login_not_completed',{url:page.url()});
     process.exit(3);
   }
 
@@ -53,11 +51,7 @@ try {
   // Look for the desired cream in drafts/ordered designs.
   const cream = page.getByText(/moisturising day cream|moisturizing day cream/i).first();
   if (!(await cream.count())) {
-    const txt = (await page.locator('body').innerText()).slice(0,5000);
-    out('blocked','no_existing_selfnamed_design_for_moisturising_day_cream',{
-      url:page.url(),pageText:txt
-    });
-    await page.screenshot({path:'selfnamed-no-design.png',fullPage:true});
+    out('blocked','no_existing_selfnamed_design_for_moisturising_day_cream',{url:page.url()});
     process.exit(4);
   }
 
@@ -76,9 +70,7 @@ try {
   }
 
   if (!(await addToStore.count())) {
-    const txt = (await page.locator('body').innerText()).slice(0,5000);
-    out('blocked','design_found_but_add_to_store_action_not_found',{url:page.url(),pageText:txt});
-    await page.screenshot({path:'selfnamed-add-to-store-missing.png',fullPage:true});
+    out('blocked','design_found_but_add_to_store_action_not_found',{url:page.url()});
     process.exit(5);
   }
 
@@ -91,13 +83,11 @@ try {
 
     if (/billing method|payment method|preauthorization|card number/i.test(bodyText)) {
       out('blocked','selfnamed_billing_method_required',{url:page.url()});
-      await page.screenshot({path:'selfnamed-billing-required.png',fullPage:true});
       process.exit(6);
     }
 
     if (/two[- ]factor|verification code|one[- ]time code|2fa/i.test(bodyText)) {
       out('blocked','selfnamed_2fa_required',{url:page.url()});
-      await page.screenshot({path:'selfnamed-2fa-required.png',fullPage:true});
       process.exit(7);
     }
 
@@ -106,8 +96,6 @@ try {
       await nova.click();
       await page.waitForTimeout(500);
     }
-
-    const price = page.locator('input').filter({has: page.locator('')});
     const priceInputs = page.locator('input[name*="price" i], input[placeholder*="price" i]');
     if (await priceInputs.count()) {
       await priceInputs.first().fill('24.90');
@@ -121,7 +109,6 @@ try {
     const successText = page.getByText(/successfully added|added to (the )?store|product added/i).first();
     if (await successText.count()) {
       out('success','selfnamed_product_added_to_nova10',{url:page.url()});
-      await page.screenshot({path:'selfnamed-map-success.png',fullPage:true});
       process.exit(0);
     }
 
@@ -133,14 +120,10 @@ try {
     }
     break;
   }
-
-  const txt = (await page.locator('body').innerText()).slice(0,5000);
-  out('blocked','workflow_reached_unknown_selfnamed_step',{url:page.url(),pageText:txt});
-  await page.screenshot({path:'selfnamed-unknown-step.png',fullPage:true});
+  out('blocked','workflow_reached_unknown_selfnamed_step',{url:page.url()});
   process.exit(8);
 } catch (e) {
   out('error','automation_exception',{message:String(e),url:page.url()});
-  try { await page.screenshot({path:'selfnamed-error.png',fullPage:true}); } catch {}
   process.exit(9);
 } finally {
   await browser.close();
