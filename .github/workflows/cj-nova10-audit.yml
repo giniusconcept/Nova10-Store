@@ -72,6 +72,7 @@ jobs:
               print('CJ_PRODUCT_CANDIDATES',json.dumps(found,ensure_ascii=False)[:9500])
               print('CJ_SEARCH_SUMMARY',json.dumps({'totalRecords':data.get('totalRecords'),'content_count':len(data.get('content') or []),'sample':[{k:str(v)[:160] for k,v in e.items() if k in ('id','pid','productName','productImage','sellPrice','productPrice','sku','productSku','productId','name','productType','productSellPrice')} for e in (data.get('content') or [])[:8]]} if isinstance(data,dict) else {}))
               report['candidates']=found
+              print('CJ_PRODUCT_FIELDS',json.dumps(list((data.get('content') or [{}])[0].get('productList',[{}])[0].keys())))
               print('CJ_PRODUCTS_SAMPLE',json.dumps([{k:str(v)[:180] for k,v in item.items() if k in ('pid','id','productId','productName','productImage','productPrice','sellPrice','productSku','name','productSellPrice','productImageUrl','productNameEn')} for entry in (data.get('content') or []) for item in (entry.get('productList') or [])[:20]])[:11500])
               print('CJ_CONTENT_STRUCTURE',json.dumps([{'keys':list(e.keys()),'child_lists':{k:len(v) for k,v in e.items() if isinstance(v,list)},'child_dicts':{k:list(v.keys()) for k,v in e.items() if isinstance(v,dict)}} for e in (data.get('content') or [])[:2] if isinstance(e,dict)]))
               report['status']='review_required'
