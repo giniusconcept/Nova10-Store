@@ -1,0 +1,21 @@
+name: NOVA10 YouTube - secure OAuth live check (read-only)
+on:
+  pull_request:
+    paths:
+      - "nova10-video-factory/src/youtube_connection_check.py"
+      - ".github/workflows/nova10-youtube-live-auth-check.yml"
+permissions:
+  contents: read
+jobs:
+  oauth-check:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only Google OAuth refresh and YouTube check
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: python nova10-video-factory/src/youtube_connection_check.py
