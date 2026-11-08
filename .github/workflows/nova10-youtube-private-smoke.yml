@@ -1,0 +1,28 @@
+name: NOVA10 YouTube - one-time PRIVATE test upload
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/nova10-youtube-private-smoke.yml"
+permissions:
+  contents: read
+jobs:
+  private-upload-smoke:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Produce original 3-second test MP4 (no third-party footage)
+        run: |
+          mkdir -p nova10-video-factory/output
+          ffmpeg -hide_banner -loglevel error -f lavfi -i "color=c=0x10203c:s=720x1280:r=24:d=3" \
+            -vf "drawtext=text='NOVA10':fontcolor=white:fontsize=76:x=(w-text_w)/2:y=500,drawtext=text='PRIVATE API TEST':fontcolor=white:fontsize=38:x=(w-text_w)/2:y=640" \
+            -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart \
+            nova10-video-factory/output/nova10-private-test.mp4 -y
+          test -s nova10-video-factory/output/nova10-private-test.mp4
+      - name: Upload exactly one private test video via YouTube API
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: python nova10-video-factory/src/youtube_private_upload_smoke.py
