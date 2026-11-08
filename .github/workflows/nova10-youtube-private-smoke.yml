@@ -1,4 +1,4 @@
-name: NOVA10 YouTube - TWO PRIVATE test uploads
+name: NOVA10 YouTube - private nozzle schematic preview
 on:
   pull_request:
     paths:
@@ -6,38 +6,21 @@ on:
 permissions:
   contents: read
 jobs:
-  private-upload-two-videos:
+  private-nozzle-preview:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Install FFmpeg
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-      - name: Produce first original 3-second private test MP4
+      - name: Install original animation dependencies
         run: |
-          mkdir -p nova10-video-factory/output
-          ffmpeg -hide_banner -loglevel error -f lavfi -i "color=c=0x10203c:s=720x1280:r=24:d=3" \
-            -vf "drawtext=text='NOVA10':fontcolor=white:fontsize=76:x=(w-text_w)/2:y=480,drawtext=text='TEST PRIVE 01':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=650" \
-            -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart \
-            nova10-video-factory/output/nova10-private-test.mp4 -y
-      - name: Upload first video to YouTube as PRIVATE
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install "pillow>=11,<13"
+      - name: Create animated illustrative nozzle clip
+        run: python nova10-video-factory/src/nozzle_schematic.py
+      - name: Upload private original nozzle illustration to YouTube
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-          NOVA10_TEST_VARIANT: "01"
-        run: python nova10-video-factory/src/youtube_private_upload_smoke.py
-      - name: Produce second distinct original 3-second private test MP4
-        run: |
-          ffmpeg -hide_banner -loglevel error -f lavfi -i "color=c=0x193b32:s=720x1280:r=24:d=3" \
-            -vf "drawtext=text='NOVA10 VIDEO FACTORY':fontcolor=white:fontsize=39:x=(w-text_w)/2:y=480,drawtext=text='TEST PRIVE 02':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=650" \
-            -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart \
-            nova10-video-factory/output/nova10-private-test.mp4 -y
-      - name: Upload second video to YouTube as PRIVATE
-        env:
-          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
-          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
-          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
-          NOVA10_TEST_VARIANT: "02"
         run: python nova10-video-factory/src/youtube_private_upload_smoke.py
