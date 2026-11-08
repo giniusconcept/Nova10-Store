@@ -31,6 +31,16 @@ def main():
         print("AUTH_STATUS=BLOCKED_MISSING_SECRETS")
         print("MISSING_NAMES="+",".join(missing))
         return 2
+    client_id=os.environ["YOUTUBE_CLIENT_ID"]
+    client_secret=os.environ["YOUTUBE_CLIENT_SECRET"]
+    refresh_token=os.environ["YOUTUBE_REFRESH_TOKEN"]
+    # Only boolean shape checks; never print credentials or fragments.
+    print("CLIENT_ID_GOOGLE_FORMAT="+str(client_id.endswith(".apps.googleusercontent.com")))
+    print("CLIENT_ID_WHITESPACE="+str(client_id != client_id.strip()))
+    print("CLIENT_SECRET_WHITESPACE="+str(client_secret != client_secret.strip()))
+    print("REFRESH_TOKEN_WHITESPACE="+str(refresh_token != refresh_token.strip()))
+    print("CLIENT_SECRET_HAS_LINEBREAK="+str("\\n" in client_secret or "\\r" in client_secret))
+    print("REFRESH_TOKEN_HAS_LINEBREAK="+str("\\n" in refresh_token or "\\r" in refresh_token))
     status,result=request_json("https://oauth2.googleapis.com/token",{
         "client_id":os.environ["YOUTUBE_CLIENT_ID"],
         "client_secret":os.environ["YOUTUBE_CLIENT_SECRET"],
