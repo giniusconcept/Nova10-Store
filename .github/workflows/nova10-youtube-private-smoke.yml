@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
       - name: Produce original 3-second test MP4 (no third-party footage)
         run: |
           mkdir -p nova10-video-factory/output
