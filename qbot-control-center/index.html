@@ -174,6 +174,7 @@ const SEED={version:1,created:'2026-10-24',projects:[
 {name:'SENTRY V8',area:'MT5',status:'testing',proof:'Rapport de validation non inclus dans la démonstration',next:'Audit de transférabilité',project:'P1',confidence:'Rapport à intégrer'},
 {name:'GOL D. ROGER',area:'XAUUSD',status:'research',proof:'Micro-spécialistes, travaux Top10 / Gate C',next:'Recherche distincte du périmètre Futures initial',project:'P3',confidence:'Expérimental'},
 {name:'OPEN UNION MONTHLY',area:'Indices',status:'testing',proof:'Résultats historiques non inclus dans la démonstration',next:'Documenter et vérifier la série',project:'P0',confidence:'Déclarée'},
+{name:'LONDON EYE v1.30',area:'US100.cash · FTMO · M1',status:'testing',proof:'Backtest natif MT5 2026 exécuté avec succès le 08/11/2026 (GitHub Actions #42479308452, tentative 2), Model=4 ticks réels ; rapport HTML/PDF généré. Succès du workflow ≠ rentabilité démontrée.',next:'Extraire les statistiques nettes du PDF et auditer les transactions, les horaires serveur et le risque effectivement pris.',project:'P0',confidence:'Rapport natif disponible'},
 {name:'FTMO 15D',area:'Indices',status:'testing',proof:'Campagne gelée 2023–2025 et OOS 2026 revendiqués',next:'Contrôle et archivage des rapports',project:'P0',confidence:'BT à vérifier'}
 ],accounts:[
 {name:'Compte prop firm (exemple)',kind:'Prop firm',status:'planned',details:'Connexion et état non renseignés',source:'Données de démonstration'},
@@ -618,8 +619,32 @@ function migrateAccountPrograms(d){
   }
   return migrateP9DeliveryClosure20261107(migrateOSWActionsStatus20261107(migrateE8RSV5Status(d)));
 }
+function migrateLondonEyeNative20261108(d){
+ const key='LONDON_EYE_NATIVE_2026_RUN_42479308452_ATTEMPT_2';
+ if(d.londonEyeRevision===key)return d;
+ d.strategies=Array.isArray(d.strategies)?d.strategies:[];
+ const seed=SEED.strategies.find(x=>x.name==='LONDON EYE v1.30');
+ const existing=d.strategies.find(x=>x.name==='LONDON EYE v1.30');
+ if(existing){Object.assign(existing,clone(seed));}else if(seed){d.strategies.push(clone(seed));}
+ d.tasks=Array.isArray(d.tasks)?d.tasks:[];
+ const tasks=[
+  {id:'P0-LONDON-EYE-NATIVE-2026',ref:'P0-LE-01',project:'P0',title:'London Eye v1.30 — backtest natif FTMO 2026, rapport HTML/PDF',status:'done',priority:'HAUTE',owner:'Q BOT',note:'Workflow GitHub Actions #42479308452, tentative 2, conclusion success le 08/11/2026. US100.cash M1, 2026-01-01 à 2026-11-08, Model=4 ticks réels, code MQ5 original compilé 0 erreur/0 avertissement, HTML et PDF natifs. Preuve : https://github.com/giniusconcept/QuantLab-Mobile/actions/runs/42479308452 . Aucun rendement ou win rate inventé.'},
+  {id:'P0-LONDON-EYE-PERFORMANCE-AUDIT',ref:'P0-LE-02',project:'P0',title:'London Eye v1.30 — lecture des KPI du rapport et audit des transactions',status:'todo',priority:'NORMALE',owner:'Q BOT Audit',note:'Examiner profit net, profit factor, win rate, drawdown, calendrier mensuel et éventuels écarts d’horaires/risk sizing. Ne pas assimiler une conclusion GitHub success à la profitabilité.'}
+ ];
+ for(const task of tasks){if(!d.tasks.some(x=>x.id===task.id))d.tasks.push(task);}
+ d.events=Array.isArray(d.events)?d.events:[];
+ if(!d.events.some(x=>String(x.text||'').includes('London Eye v1.30 — backtest natif MT5 2026 confirmé'))){
+   d.events.unshift({at:'08/11/2026 20:40',text:'London Eye v1.30 — backtest natif MT5 2026 confirmé (GitHub Actions #42479308452 / tentative 2, succès), rapport HTML/PDF disponible ; revue des KPI restant à faire.'});
+ }
+ d.notes=Array.isArray(d.notes)?d.notes:[];
+ if(!d.notes.some(x=>String(x.text||'').includes('London Eye / FTMO / native 2026'))){
+   d.notes.unshift({at:'2026-11-08',text:'London Eye / FTMO / native 2026 : protocole exécuté sur ticks réels Model=4 ; rapport original obtenu. Preuve : run #42479308452 tentative 2. Le statut succès documente la génération des livrables, pas les performances.'});
+ }
+ d.londonEyeRevision=key;
+ return d;
+}
 state.projects=state.projects.filter(p=>p.id!=='P7');state.tasks=state.tasks.filter(t=>t.project!=='P7');
-state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));state=migrateP20DowOnly20261107(migrateP20E8One20261107(migrateP19E8Pro6Pct20261107(migrateP4Remove05to08_20261107(migrateP4PayoutFinancing20261107(migrateP18OneShotMonthly20261107(migrateP13Status20261107(migrateP10OSWFundedNext20261107(migrateP10AdministrativeClosure20261107(migrateP11AdministrativeClosure20261107(migrateNomenclature(migrateAccountPrograms(state))))))))))));try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
+state=migrateNomenclature(migratePortfolioKickoff(migrateP4Genesis(migrateP2Queued(migrateP1RSV5(migrateP6(migrateP5(state)))))));state=migrateP20DowOnly20261107(migrateP20E8One20261107(migrateP19E8Pro6Pct20261107(migrateP4Remove05to08_20261107(migrateP4PayoutFinancing20261107(migrateP18OneShotMonthly20261107(migrateP13Status20261107(migrateP10OSWFundedNext20261107(migrateP10AdministrativeClosure20261107(migrateP11AdministrativeClosure20261107(migrateNomenclature(migrateAccountPrograms(state))))))))))));state=migrateLondonEyeNative20261108(state);try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}
 let current='home',focused='P9',filter='all',taskFilter='all',query='',toastTimer;
 const pages=[['home','Vue 360°','home'],['programs','Programmes','programs'],['strategies','Bots & stratégies','strategies'],['capital','Capital / Genesis','capital'],['tasks','Tâches & backlog','tasks'],['journal','Journal & gouvernance','journal']];
 function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
