@@ -1,0 +1,26 @@
+name: NOVA10 YouTube - private nozzle schematic preview
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/nova10-youtube-private-smoke.yml"
+permissions:
+  contents: read
+jobs:
+  private-nozzle-preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install original animation dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          python -m pip install "pillow>=11,<13"
+      - name: Create animated illustrative nozzle clip
+        run: python nova10-video-factory/src/nozzle_schematic.py
+      - name: Upload private original nozzle illustration to YouTube
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: python nova10-video-factory/src/youtube_private_upload_smoke.py
