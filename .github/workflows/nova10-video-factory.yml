@@ -4,6 +4,8 @@ on:
     paths:
       - 'nova10-video-factory/**'
       - '.github/workflows/nova10-video-factory.yml'
+  repository_dispatch:
+    types: [nova10_video_factory_render]
   workflow_dispatch:
     inputs:
       demo:
@@ -30,7 +32,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Render
         env:
-          DEMO: ${{ github.event_name == 'pull_request' || inputs.demo }}
+          DEMO: ${{ github.event_name != 'workflow_dispatch' || inputs.demo }}
         run: |
           if [ "$DEMO" = "true" ]; then
             python src/factory.py --demo
