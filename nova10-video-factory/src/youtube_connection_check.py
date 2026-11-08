@@ -18,7 +18,13 @@ def request_json(url, data=None, bearer=None):
             return r.status,json.loads(r.read(30000))
     except urllib.error.HTTPError as e:
         # never emit error body, which could include potentially sensitive data
-        return e.code,{}
+        try:
+            body=json.loads(e.read(6000))
+            error_code=body.get("error","")
+            error_code=error_code if error_code in {"invalid_client","invalid_grant","unauthorized_client","invalid_request","access_denied"} else "other_error"
+        except Exception:
+            error_code="unparsed_error"
+        return e.code,{"safe_error_code":error_code}
 def main():
     missing=[k for k in REQUIRED if not os.environ.get(k)]
     if missing:
@@ -34,6 +40,7 @@ def main():
     if status!=200 or not token:
         print("AUTH_STATUS=FAILED")
         print("TOKEN_ENDPOINT_HTTP="+str(status))
+        print("GOOGLE_ERROR_CODE="+str(result.get("safe_error_code","unknown")))
         print("NO_UPLOAD_PERFORMED=true")
         return 1
     print("AUTH_STATUS=SUCCESS")
