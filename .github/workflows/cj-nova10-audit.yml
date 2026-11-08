@@ -67,3 +67,5 @@ jobs:
           name: cj-nova10-audit
           path: cj-audit.json
           if-no-files-found: warn
+
+# Connection retest after CJ_API_KEY configured, 2026-11-08
