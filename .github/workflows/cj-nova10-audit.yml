@@ -40,6 +40,7 @@ jobs:
                   token=auth['data']['accessToken']
               hdr={'CJ-Access-Token':token}
               shops=request('/shop/getShops',hdr)
+          print('CJ_SHOP_RESPONSE_META',json.dumps({'keys':list(shops.keys()),'code':shops.get('code'),'result':shops.get('result'),'data_type':type(shops.get('data')).__name__,'data_count':len(shops.get('data') or []) if isinstance(shops.get('data'),list) else None}))
               if not shops.get('result'):raise ValueError('CJ shop list rejected: code='+str(shops.get('code'))+' message='+str(shops.get('message',''))[:140])
               matches=[{'id':s.get('id'),'name':s.get('name'),'status':s.get('status'),'type':s.get('type')} for s in shops.get('data',[]) if 'nova10' in str(s.get('name','')).lower()]
               report['shops']=matches
