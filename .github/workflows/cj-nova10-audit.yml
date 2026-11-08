@@ -1,0 +1,69 @@
+name: NOVA10 CJdropshipping connection audit
+on:
+  push:
+    paths:
+      - '.github/workflows/cj-nova10-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cj-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+      CJ_ACCESS_TOKEN: ${{ secrets.CJ_ACCESS_TOKEN }}
+    steps:
+      - name: Audit authorized CJ account and nozzle candidates (no product creation)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os,json,urllib.request,urllib.parse,sys
+          from datetime import datetime,timezone
+          report={'at':datetime.now(timezone.utc).isoformat(),'store':'NOVA10','phase':'CJ audit','status':'blocked'}
+          def write():
+              with open('cj-audit.json','w') as f: json.dump(report,f,indent=2)
+              print('AUDIT_STATUS:',report['status'],report.get('reason',''))
+          token=os.getenv('CJ_ACCESS_TOKEN','').strip()
+          key=os.getenv('CJ_API_KEY','').strip()
+          base='https://developers.cjdropshipping.com/api2.0/v1'
+          def request(endpoint,headers=None,payload=None):
+              req=urllib.request.Request(base+endpoint,data=payload,headers=headers or {},method='POST' if payload else 'GET')
+              with urllib.request.urlopen(req,timeout=30) as r:return json.load(r)
+          try:
+              if not token and not key:
+                  report['reason']='missing_CJ_API_KEY_or_CJ_ACCESS_TOKEN_secret'
+                  write();sys.exit(2)
+              if not token:
+                  auth=request('/authentication/getAccessToken',{'Content-Type':'application/json'},json.dumps({'apiKey':key}).encode())
+                  if not auth.get('result'):raise ValueError('CJ token exchange refused: '+str(auth.get('code')))
+                  token=auth['data']['accessToken']
+              hdr={'CJ-Access-Token':token}
+              shops=request('/shop/getShops',hdr)
+              if not shops.get('result'):raise ValueError('CJ shop list rejected: '+str(shops.get('code')))
+              matches=[{'id':s.get('id'),'name':s.get('name'),'status':s.get('status'),'type':s.get('type')} for s in shops.get('data',[]) if 'nova10' in str(s.get('name','')).lower()]
+              report['shops']=matches
+              if len(matches)!=1 or matches[0]['status']!=1:
+                  report['reason']='NOVA10_not_uniquely_authorized_in_CJ'
+                  write();sys.exit(3)
+              q=urllib.parse.urlencode({'page':1,'size':20,'keyWord':'pressure washer nozzle'})
+              result=request('/product/listV2?'+q,hdr)
+              if not result.get('result'):raise ValueError('CJ search rejected: '+str(result.get('code')))
+              data=result.get('data') or {}
+              # Limited metadata only; do not leak credentials or create products.
+              report['candidate_data_keys']=list(data) if isinstance(data,dict) else []
+              report['status']='review_required'
+              report['reason']='CJ_authorized_search_completed_product_PID_VID_and_listing_options_require_review'
+          except Exception as exc:
+              report['status']='blocked'
+              report['reason']=type(exc).__name__+': '+str(exc)[:160]
+          write()
+          if report['status']=='blocked':sys.exit(4)
+          PY
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cj-nova10-audit
+          path: cj-audit.json
+          if-no-files-found: warn
