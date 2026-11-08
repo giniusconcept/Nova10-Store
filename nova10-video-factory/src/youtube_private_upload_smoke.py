@@ -28,7 +28,7 @@ def error_code(body):
     return "unclassified"
 
 def main():
-    media=Path("nova10-video-factory/output/nova10-private-test.mp4")
+    media=Path("nova10-video-factory/output/nova10-real-pressure-washing-ccby-private.mp4")
     if not media.is_file() or media.stat().st_size<1024:
         print("UPLOAD_STATUS=FAILED_NO_ORIGINAL_TEST_MEDIA");return 2
     required=("YOUTUBE_CLIENT_ID","YOUTUBE_CLIENT_SECRET","YOUTUBE_REFRESH_TOKEN")
@@ -51,10 +51,10 @@ def main():
     token=json.loads(body)["access_token"]
     print("OAUTH_REFRESH=SUCCESS")
     # Upload original branded synthetic test media as private; never public/unlisted.
-    title="NOVA10 - TEST TECHNIQUE PRIVE - "+os.environ.get("GITHUB_RUN_ID","")
+    title="Buse rotative haute pression en action | Demonstration Karcher Dirtblaster"
     data=json.dumps({
         "snippet":{"title":title,
-                   "description":"Test technique prive du systeme NOVA10 VIDEO FACTORY. Video originale creee automatiquement. Aucune demonstration produit. Ne pas diffuser.",
+                   "description":"Demonstration reelle de nettoyage haute pression avec une buse rotative Karcher Dirtblaster. ATTENTION : le materiel filme n est pas la buse NOVA10/CJdropshipping. Source et auteur : Pondguru (https://www.youtube.com/watch?v=UQ2Oe1rCj1I). Video Wikimedia Commons : https://commons.wikimedia.org/wiki/File:K%C3%A4rcher_K3.550_pressure_washing_using_a_Dirtblaster_wand_attachment.webm . Licence Creative Commons Attribution 3.0 : https://creativecommons.org/licenses/by/3.0/ . Extrait de 25 secondes, recadre au format vertical et son supprime par NOVA10 VIDEO FACTORY. Adaptation sans approbation implicite de l auteur.",
                    "categoryId":"22"},
         "status":{"privacyStatus":"private","selfDeclaredMadeForKids":False}
     }).encode()
@@ -93,7 +93,7 @@ def main():
     print("VIDEO_PRIVACY=private")
     print("VIDEO_ID="+vid)
     print("VIDEO_URL=https://www.youtube.com/watch?v="+vid)
-    print("SOURCE=ORIGINAL_SYNTHETIC_TEST")
+    print("SOURCE=WIKIMEDIA_COMMONS_PONDGURU_CC_BY_3_0")
     print("MEDIA_SHA256="+hashlib.sha256(media_bytes).hexdigest())
     return 0
 
