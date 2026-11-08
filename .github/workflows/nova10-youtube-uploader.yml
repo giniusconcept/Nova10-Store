@@ -1,0 +1,26 @@
+name: NOVA10 YouTube OAuth uploader - offline safety tests
+on:
+  pull_request:
+    paths:
+      - "nova10-video-factory/src/youtube_uploader.py"
+      - "nova10-video-factory/tests/test_youtube_uploader.py"
+      - ".github/workflows/nova10-youtube-uploader.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  security-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: nova10-video-factory
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile uploader
+        run: python -m py_compile src/youtube_uploader.py
+      - name: Run uploader guardrail tests (no OAuth tokens injected)
+        run: python -m unittest discover -s tests -p "test_youtube_uploader.py" -v
