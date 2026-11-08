@@ -1,0 +1,46 @@
+name: NOVA10 Video Factory
+on:
+  pull_request:
+    paths:
+      - 'nova10-video-factory/**'
+      - '.github/workflows/nova10-video-factory.yml'
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: Render an illustrative, clearly marked demo video
+        required: true
+        default: true
+        type: boolean
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: nova10-video-factory
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Render
+        env:
+          DEMO: ${{ github.event_name == 'pull_request' || inputs.demo }}
+        run: |
+          if [ "$DEMO" = "true" ]; then
+            python src/factory.py --demo
+          else
+            python src/factory.py
+          fi
+      - name: Audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova10-video-and-audit
+          path: nova10-video-factory/output/
+          retention-days: 7
