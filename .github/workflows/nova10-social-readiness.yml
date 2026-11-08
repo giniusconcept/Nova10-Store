@@ -1,0 +1,32 @@
+name: NOVA10 social publication - safety and readiness
+on:
+  pull_request:
+    paths:
+      - "nova10-video-factory/src/social_publish.py"
+      - "nova10-video-factory/tests/test_social_publish.py"
+      - ".github/workflows/nova10-social-readiness.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  social-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: nova10-video-factory
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run isolated social publishing safety tests
+        run: python -m unittest discover -s tests -p "test_social_publish.py" -v
+      - name: Run offline readiness audit (secrets deliberately not injected)
+        run: python src/social_publish.py
+      - name: Archive sanitized readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova10-social-readiness
+          path: nova10-video-factory/output/social_readiness.json
+          retention-days: 7
