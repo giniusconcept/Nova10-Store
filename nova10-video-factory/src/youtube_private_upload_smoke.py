@@ -28,7 +28,7 @@ def error_code(body):
     return "unclassified"
 
 def main():
-    media=Path("nova10-video-factory/output/nova10-private-test.mp4")
+    media=Path("nova10-video-factory/output/nova10-buse-schematic-private.mp4")
     if not media.is_file() or media.stat().st_size<1024:
         print("UPLOAD_STATUS=FAILED_NO_ORIGINAL_TEST_MEDIA");return 2
     required=("YOUTUBE_CLIENT_ID","YOUTUBE_CLIENT_SECRET","YOUTUBE_REFRESH_TOKEN")
@@ -51,10 +51,10 @@ def main():
     token=json.loads(body)["access_token"]
     print("OAUTH_REFRESH=SUCCESS")
     # Upload original branded synthetic test media as private; never public/unlisted.
-    title="NOVA10 - TEST PRIVE "+os.environ.get("NOVA10_TEST_VARIANT","X")+" - "+os.environ.get("GITHUB_RUN_ID","")
+    title="NOVA10 - Buse rotative - APERCU SCHEMATIQUE PRIVE"
     data=json.dumps({
         "snippet":{"title":title,
-                   "description":"Test technique prive "+os.environ.get("NOVA10_TEST_VARIANT","X")+" du systeme NOVA10 VIDEO FACTORY. Video originale creee automatiquement. Aucune demonstration produit. Ne pas diffuser.",
+                   "description":"Illustration schematique originale du principe d une buse rotative haute pression. Ce contenu n est PAS une demonstration ni un enregistrement du produit reel. Apercu prive uniquement. Ne pas diffuser.",
                    "categoryId":"22"},
         "status":{"privacyStatus":"private","selfDeclaredMadeForKids":False}
     }).encode()
@@ -93,7 +93,7 @@ def main():
     print("VIDEO_PRIVACY=private")
     print("VIDEO_ID="+vid)
     print("VIDEO_URL=https://www.youtube.com/watch?v="+vid)
-    print("SOURCE=ORIGINAL_SYNTHETIC_TEST")
+    print("SOURCE=ORIGINAL_SCHEMATIC_ANIMATION")
     print("MEDIA_SHA256="+hashlib.sha256(media_bytes).hexdigest())
     return 0
 
