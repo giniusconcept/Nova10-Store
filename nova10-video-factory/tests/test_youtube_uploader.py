@@ -44,7 +44,6 @@ class YouTubeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"OAuth"):
                 execute(m,self.media,"private",environ={"ENABLE_YOUTUBE_UPLOAD":"true",
                     "YOUTUBE_UPLOAD_APPROVED":"true"},do_upload=True)
-    def test_mock_upload(self):
-        with patch("googleapiclient.http.MediaFileUpload",create=True):
-            pass
+    def test_private_is_default_gate(self):
+        self.assertEqual(validate_manifest(self.good,self.media,"private")["privacy"],"private")
 if __name__=="__main__":unittest.main()
