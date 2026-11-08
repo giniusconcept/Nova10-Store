@@ -1,0 +1,91 @@
+name: NOVA10 CJ nozzle mapping
+on:
+  push:
+    paths:
+      - '.github/workflows/cj-nova10-map.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+    steps:
+      - name: Save and map verified Shopify variant to CJ API store
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os,json,urllib.request,urllib.parse,sys,time
+          BASE='https://developers.cjdropshipping.com/api2.0/v1'
+          PRODUCT='11453715939670'
+          VARIANT='56550726009174'
+          CJ_PRODUCT='2111013111221182465'
+          CJ_SKU='CJXC32705930001'
+          out={'shopifyProductId':PRODUCT,'shopifyVariantId':VARIANT,'cjProductId':CJ_PRODUCT,'cjVariantSku':CJ_SKU,'status':'blocked','steps':[]}
+          def log(stage,data):
+              rec={'stage':stage,'code':data.get('code'),'success':data.get('success',data.get('result')),'message':str(data.get('message') or '')[:160]}
+              out['steps'].append(rec); print('CJ_STAGE',json.dumps(rec))
+              return bool(data.get('success') is True or data.get('result') is True or data.get('code')==0)
+          def req(path,token=None,data=None):
+              headers={'Content-Type':'application/json'}
+              if token:headers['CJ-Access-Token']=token
+              request=urllib.request.Request(BASE+path,headers=headers,data=json.dumps(data).encode() if data is not None else None,method='POST' if data is not None else 'GET')
+              with urllib.request.urlopen(request,timeout=35) as r:return json.load(r)
+          try:
+              key=os.getenv('CJ_API_KEY')
+              if not key:raise RuntimeError('CJ_API_KEY missing')
+              auth=req('/authentication/getAccessToken',data={'apiKey':key})
+              if not log('authentication',auth):raise RuntimeError('authentication refused')
+              token=auth['data']['accessToken']
+              shops=req('/shop/getShops',token)
+              if not log('shopList',shops):raise RuntimeError('shop lookup refused')
+              selected=[s for s in shops.get('data',[]) if s.get('name')=='NOVA10-GITHUB' and s.get('type')=='api' and s.get('status')==1]
+              if len(selected)!=1:raise RuntimeError('NOVA10-GITHUB authorized api shop not uniquely identified')
+              shop=str(selected[0]['id'])
+              out['cjShopName']='NOVA10-GITHUB';out['cjShopType']='api'
+              d=req('/product/query?'+urllib.parse.urlencode({'pid':CJ_PRODUCT}),token)
+              if not log('productDetail',d):raise RuntimeError('CJ product detail refused')
+              obj=d.get('data') or {}
+              matches=[v for v in obj.get('variants',[]) if v.get('variantSku')==CJ_SKU]
+              if len(matches)!=1:raise RuntimeError('CJ variant SKU not unique')
+              v=matches[0];vid=str(v['vid']);out['cjVariantId']=vid
+              existing=req('/product/conn/connection?'+urllib.parse.urlencode({'shopId':shop,'platformProductId':PRODUCT,'page':1,'pageSize':20}),token)
+              if not log('existingConnectionCheck',existing):raise RuntimeError('connection list refused')
+              rows=(existing.get('data') or {}).get('list') or []
+              if rows:
+                  if any(str(x.get('platformVariantId'))==VARIANT and str(x.get('cjVariantId'))==vid for x in rows):
+                      out['status']='mapped_verified_existing';print('CJ_ALREADY_CONNECTED')
+                  else:raise RuntimeError('Conflicting existing mapping: refused overwrite')
+              else:
+                  image='https://cdn.shopify.com/s/files/1/1064/6011/9382/files/bf2f24faadd94d10b51ee1eb940fc6bd.jpg?v=1794136783'
+                  a=req('/store/product/saveProduct',token,{'id':PRODUCT,'shopId':shop,'title':'NOVA10 - Buse rotative haute pression 2500 PSI raccord rapide 1/4','image':image,'priceMin':39.90,'priceMax':39.90,'priceCurrency':'EUR'})
+                  if not log('saveShopifyProductInCJ',a):raise RuntimeError('saveProduct refused')
+                  b=req('/store/product/saveVariantBatch',token,{'shopId':shop,'variants':[{'id':VARIANT,'productId':PRODUCT,'title':'Default Title','sku':CJ_SKU,'image':image,'shopPrice':39.90,'shopPriceCurrency':'EUR','weight':100,'weightUnit':'g'}]})
+                  if not log('saveShopifyVariantInCJ',b):raise RuntimeError('saveVariantBatch refused')
+                  if not all(x.get('saveSuccess') is True for x in (b.get('data') or [])):raise RuntimeError('variant saveSuccess false')
+                  payload={'shopId':shop,'defaultArea':1,'logistics':'PacketPlus','cjProductId':CJ_PRODUCT,'platformProductId':PRODUCT,'sourceCountryCode':'CN','sourceCountry':'China','targetCountryCode':'FR','targetCountry':'France','variantList':[{'cjVariantId':vid,'platformVariantId':VARIANT}]}
+                  c=req('/product/conn/connection',token,payload)
+                  if not log('createConnection',c):raise RuntimeError('connection POST refused')
+                  time.sleep(1)
+                  verified=req('/product/conn/connection?'+urllib.parse.urlencode({'shopId':shop,'platformProductId':PRODUCT,'page':1,'pageSize':20}),token)
+                  if not log('verifyConnection',verified):raise RuntimeError('connection GET refused')
+                  matches=[x for x in ((verified.get('data') or {}).get('list') or []) if str(x.get('platformVariantId'))==VARIANT and str(x.get('cjVariantId'))==vid]
+                  if not matches:raise RuntimeError('mapping not found in readback')
+                  out['status']='mapped_verified'
+              out['warning']='CJ API shop mapping is not proof of native Shopify-app order sync; Shopify order transfer requires separate audit'
+          except Exception as e:
+              out['status']='blocked';out['reason']=str(e)[:200]
+          finally:
+              with open('cj-nova10-mapping-audit.json','w') as f:json.dump(out,f,indent=2)
+              print('MAPPING_FINAL',json.dumps(out))
+          if out['status'] not in ('mapped_verified','mapped_verified_existing'):sys.exit(1)
+          PY
+      - name: Upload audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova10-cj-nozzle-mapping
+          path: cj-nova10-mapping-audit.json
+          if-no-files-found: error
