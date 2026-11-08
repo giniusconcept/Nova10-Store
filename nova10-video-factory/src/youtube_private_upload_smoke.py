@@ -51,10 +51,10 @@ def main():
     token=json.loads(body)["access_token"]
     print("OAUTH_REFRESH=SUCCESS")
     # Upload original branded synthetic test media as private; never public/unlisted.
-    title="NOVA10 - TEST TECHNIQUE PRIVE - "+os.environ.get("GITHUB_RUN_ID","")
+    title="NOVA10 - TEST PRIVE "+os.environ.get("NOVA10_TEST_VARIANT","X")+" - "+os.environ.get("GITHUB_RUN_ID","")
     data=json.dumps({
         "snippet":{"title":title,
-                   "description":"Test technique prive du systeme NOVA10 VIDEO FACTORY. Video originale creee automatiquement. Aucune demonstration produit. Ne pas diffuser.",
+                   "description":"Test technique prive "+os.environ.get("NOVA10_TEST_VARIANT","X")+" du systeme NOVA10 VIDEO FACTORY. Video originale creee automatiquement. Aucune demonstration produit. Ne pas diffuser.",
                    "categoryId":"22"},
         "status":{"privacyStatus":"private","selfDeclaredMadeForKids":False}
     }).encode()
