@@ -1,4 +1,4 @@
-name: NOVA10 YouTube - one-time PRIVATE test upload
+name: NOVA10 - licensed REAL pressure-washing footage to YouTube PRIVATE
 on:
   pull_request:
     paths:
@@ -6,23 +6,17 @@ on:
 permissions:
   contents: read
 jobs:
-  private-upload-smoke:
+  licensed-real-video:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Install FFmpeg
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-      - name: Produce original 3-second test MP4 (no third-party footage)
-        run: |
-          mkdir -p nova10-video-factory/output
-          ffmpeg -hide_banner -loglevel error -f lavfi -i "color=c=0x10203c:s=720x1280:r=24:d=3" \
-            -vf "drawtext=text='NOVA10':fontcolor=white:fontsize=76:x=(w-text_w)/2:y=500,drawtext=text='PRIVATE API TEST':fontcolor=white:fontsize=38:x=(w-text_w)/2:y=640" \
-            -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart \
-            nova10-video-factory/output/nova10-private-test.mp4 -y
-          test -s nova10-video-factory/output/nova10-private-test.mp4
-      - name: Upload exactly one private test video via YouTube API
+      - name: Install FFmpeg for authentic CC BY 3.0 video
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+      - name: Retrieve real Wikimedia Commons video and create 25-second licensed clip
+        run: python nova10-video-factory/src/prepare_cc_video.py
+      - name: Upload authentic licensed excerpt to YouTube PRIVATE
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
