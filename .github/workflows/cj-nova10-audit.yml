@@ -54,6 +54,23 @@ jobs:
               data=result.get('data') or {}
               # Limited metadata only; do not leak credentials or create products.
               report['candidate_data_keys']=list(data) if isinstance(data,dict) else []
+              print('CJ_PRODUCT_DATA_STRUCTURE',json.dumps({'keys':list(data) if isinstance(data,dict) else [],'types':{k:type(v).__name__ for k,v in data.items()} if isinstance(data,dict) else {}}))
+              def summarize(v):
+                  fields=['pid','productId','productName','productImage','productImageUrl','productPrice','sellPrice','productSku','sku','vid','variantId','variantSku','price','name','image']
+                  return {k:v[k] for k in fields if isinstance(v,dict) and k in v and isinstance(v[k],(str,int,float))}
+              found=[]
+              def collect(v,depth=0):
+                  if depth>4 or len(found)>=15:return
+                  if isinstance(v,list):
+                      for item in v:collect(item,depth+1)
+                  elif isinstance(v,dict):
+                      s=summarize(v)
+                      if ('pid' in s or 'productId' in s) and len(s)>1:found.append(s)
+                      for child in v.values():
+                          if isinstance(child,(list,dict)):collect(child,depth+1)
+              collect(data)
+              print('CJ_PRODUCT_CANDIDATES',json.dumps(found,ensure_ascii=False)[:9500])
+              report['candidates']=found
               report['status']='review_required'
               report['reason']='CJ_authorized_search_completed_product_PID_VID_and_listing_options_require_review'
           except Exception as exc:
